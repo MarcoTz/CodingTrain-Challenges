@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 starfield = { path="../01_starfield" }
+mengersponge = { path="../02_mengersponge" }

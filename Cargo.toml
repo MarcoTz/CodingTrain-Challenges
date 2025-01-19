@@ -3,6 +3,7 @@ members = [
   "runner",
   "graphics_lib",
   "01_starfield",
+  "02_mengersponge"
 ]
 
 resolver = "2"

@@ -8,7 +8,7 @@ fn main() {
 
     // This is always the current challenge
     if args.len() == 1 {
-        starfield::run();
+        mengersponge::run();
         return;
     }
 
@@ -23,6 +23,7 @@ fn main() {
 
     match num {
         1 => starfield::run(),
+        2 => mengersponge::run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

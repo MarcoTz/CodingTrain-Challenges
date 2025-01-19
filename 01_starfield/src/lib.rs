@@ -1,5 +1,10 @@
-use graphics::{circle_arc, line, Transformed};
-use graphics_lib::{app::App, drawable::Drawable, point::Point};
+use graphics::{circle_arc, line};
+use graphics_lib::{
+    app::App,
+    drawable::{Drawable, TransformMatrix},
+    input_handler::InputHandler,
+    point::Point,
+};
 use opengl_graphics::GlGraphics;
 use piston::input::{RenderArgs, UpdateArgs};
 use std::f64::consts::PI;
@@ -31,42 +36,35 @@ impl Star {
 }
 
 impl Drawable for Star {
-    fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics) {
-        if self.pos.x == 0.0 && self.pos.y == 0.0 {
-            return;
-        }
-        let (center_x, center_y) = (args.window_size[0] / 2.0, args.window_size[1] / 2.0);
+    fn draw(&self, _: &RenderArgs, gl: &mut GlGraphics, transform: TransformMatrix) {
         let mut shortened = self.pos.clone();
         shortened.set_abs(self.pos.abs() - self.len);
         if shortened.abs() < self.len {
             return;
         }
 
-        gl.draw(args.viewport(), |c, gl| {
-            let transform = c.transform.trans(center_x, center_y);
-            line(
-                self.color,
-                LINE_THICKNESS,
-                [self.pos.x, self.pos.y, shortened.x, shortened.y],
-                transform,
-                gl,
-            );
-            let circle_radius = 5.0 * LINE_THICKNESS;
-            circle_arc(
-                self.color,
-                circle_radius,
-                0.0,
-                2.0 * PI,
-                [
-                    self.pos.x - circle_radius / 2.0,
-                    self.pos.y - circle_radius / 2.0,
-                    circle_radius / 2.0,
-                    circle_radius / 2.0,
-                ],
-                transform,
-                gl,
-            );
-        });
+        line(
+            self.color,
+            LINE_THICKNESS,
+            [self.pos.x, self.pos.y, shortened.x, shortened.y],
+            transform,
+            gl,
+        );
+        let circle_radius = 5.0 * LINE_THICKNESS;
+        circle_arc(
+            self.color,
+            circle_radius,
+            0.0,
+            2.0 * PI,
+            [
+                self.pos.x - circle_radius / 2.0,
+                self.pos.y - circle_radius / 2.0,
+                circle_radius / 2.0,
+                circle_radius / 2.0,
+            ],
+            transform,
+            gl,
+        );
     }
 
     fn update(&mut self, args: &UpdateArgs) {
@@ -95,14 +93,13 @@ impl StarSpawner {
 }
 
 impl Drawable for StarSpawner {
-    fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics) {
+    fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics, transform: TransformMatrix) {
         for star in self.stars.iter() {
-            star.draw(args, gl);
+            star.draw(args, gl, transform);
         }
     }
 
     fn update(&mut self, args: &UpdateArgs) {
-        println!("{}", self.stars.len());
         let mut to_remove = vec![];
         for (ind, star) in self.stars.iter_mut().enumerate() {
             star.update(args);
@@ -124,6 +121,8 @@ impl Drawable for StarSpawner {
         }
     }
 }
+
+impl InputHandler for StarSpawner {}
 
 pub fn run() {
     let mut app = App::new(WINDOW_WIDTH, WINDOW_HEIGHT);
