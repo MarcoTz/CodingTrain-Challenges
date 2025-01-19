@@ -8,7 +8,8 @@ fn main() {
 
     // This is always the current challenge
     if args.len() == 1 {
-        starfield::run()
+        starfield::run();
+        return;
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);

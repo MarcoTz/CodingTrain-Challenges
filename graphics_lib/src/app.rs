@@ -14,9 +14,9 @@ pub struct App {
 }
 
 impl App {
-    pub fn new() -> App {
+    pub fn new(width: f64, height: f64) -> App {
         let opengl = OpenGL::V3_2;
-        let window: GlutinWindow = WindowSettings::new("spinning-square", [200, 200])
+        let window: GlutinWindow = WindowSettings::new("spinning-square", [width, height])
             .graphics_api(opengl)
             .exit_on_esc(true)
             .build()
