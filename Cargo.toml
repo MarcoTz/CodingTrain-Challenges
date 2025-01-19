@@ -1,10 +1,9 @@
 [workspace]
 members = [
   "runner",
+  "graphics_lib",
   "01_starfield",
 ]
 
 resolver = "2"
 default-members = ["runner"]
-
-
