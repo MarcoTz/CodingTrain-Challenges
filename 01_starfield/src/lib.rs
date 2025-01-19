@@ -35,7 +35,7 @@ impl Drawable for Square {
     }
 }
 
-pub fn run_window() {
+pub fn run() {
     let mut app = App::new();
     app.add_object(Square {
         pos: Point {
