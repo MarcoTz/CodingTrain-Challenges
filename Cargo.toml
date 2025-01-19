@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "runner",
+  "01_starfield",
+]
+
+resolver = "2"
+default-members = ["runner"]
+
+
