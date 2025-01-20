@@ -24,7 +24,9 @@ impl Default for Menger {
 }
 
 impl Drawable for Menger {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    type DrawingArgs = ();
+
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
         let transform = ctx.center_trans();
         let mut width = ctx.args.window_size[0] / 1.5;
         width = width + ((3 - width as u64 % 3) as f64);
@@ -63,7 +65,9 @@ impl Drawable for Menger {
 }
 
 impl InputHandler for Menger {
-    fn handle(&mut self, args: &ButtonArgs) {
+    type HandlerArgs = ();
+
+    fn handle(&mut self, args: &ButtonArgs, _: &()) {
         if args.state != ButtonState::Release {
             return;
         }
@@ -81,6 +85,10 @@ impl InputHandler for Menger {
 }
 
 impl Runnable for Menger {
+    type DrawingArgs = ();
+    type UpdateArgs = ();
+    type HandlerArgs = ();
+
     fn window_size(&self) -> Size {
         Size {
             width: WINDOW_WIDTH,
@@ -88,10 +96,10 @@ impl Runnable for Menger {
         }
     }
 
-    fn to_draw(&self) -> Vec<&dyn Drawable> {
-        vec![self]
+    fn to_draw(&self) -> Vec<(&dyn Drawable<DrawingArgs = ()>, &())> {
+        vec![(self, &())]
     }
-    fn handlers(&mut self) -> Vec<&mut dyn InputHandler> {
-        vec![self]
+    fn handlers(&mut self) -> Vec<(&mut dyn InputHandler<HandlerArgs = ()>, &())> {
+        vec![(self, &())]
     }
 }

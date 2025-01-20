@@ -1,13 +1,13 @@
-use graphics_lib::{app::App, Runnable};
+use graphics_lib::app::App;
 use std::env;
 
 const ERR_EXIT_MSG: &str = "No number provided, try --help for help";
 const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 
-fn get_runnable(args: &mut env::Args) -> Box<dyn Runnable> {
+fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return Box::new(snake::SnakeGame::new());
+        return App::new(snake::SnakeGame::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -20,16 +20,14 @@ fn get_runnable(args: &mut env::Args) -> Box<dyn Runnable> {
     };
 
     match num {
-        1 => Box::new(starfield::StarSpawner::new()),
-        2 => Box::new(mengersponge::Menger::new()),
-        3 => Box::new(snake::SnakeGame::new()),
+        1 => App::new(starfield::StarSpawner::new()).run(),
+        2 => App::new(mengersponge::Menger::new()).run(),
+        3 => App::new(snake::SnakeGame::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }
 
 fn main() {
     let mut args = env::args();
-    let runnable = get_runnable(&mut args);
-    let mut app = App::new(runnable);
-    app.run();
+    run_app(&mut args);
 }

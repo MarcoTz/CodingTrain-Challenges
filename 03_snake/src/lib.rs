@@ -1,4 +1,6 @@
-use graphics_lib::{Drawable, InputHandler, Runnable, Updatable};
+use graphics::{clear, rectangle};
+use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext};
+use opengl_graphics::GlGraphics;
 use window::Size;
 
 mod food;
@@ -8,7 +10,7 @@ use snake::Snake;
 
 const WIDTH: f64 = 600.0;
 const HEIGHT: f64 = 600.0;
-const GRID_SQUARE: f64 = 10.0;
+const GRID_SQUARE: f64 = 50.0;
 
 const X_RES: f64 = WIDTH / (GRID_SQUARE);
 const Y_RES: f64 = HEIGHT / (GRID_SQUARE);
@@ -22,12 +24,62 @@ impl SnakeGame {
     pub fn new() -> SnakeGame {
         SnakeGame {
             food: Food::new(),
-            snake: Snake::new(),
+            snake: Snake::new((X_RES / 2.0).round() as u64, (Y_RES / 2.0).round() as u64),
         }
     }
 }
 
+impl Default for SnakeGame {
+    fn default() -> SnakeGame {
+        SnakeGame::new()
+    }
+}
+
+impl Updatable for SnakeGame {
+    type UpdateArgs = ();
+    fn update(&mut self, ctx: &UpdateContext, _: &()) {
+        self.snake.update(ctx, &());
+        let snake_pos = self.snake.pos();
+        if snake_pos.0 == self.food.x && snake_pos.1 == self.food.y {
+            self.food = Food::new();
+            self.snake.grow();
+        }
+        if self.snake.check_death(ctx.window_width, ctx.window_height) {
+            std::process::exit(0)
+        }
+    }
+}
+
+impl Drawable for SnakeGame {
+    type DrawingArgs = ();
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+        let transform = ctx.id_trans();
+        let bg_light = [0.0, 1.0, 0.0, 1.0];
+        let bg_dark = [0.5, 1.0, 0.0, 1.0];
+        clear(bg_light, gl);
+        let num_cols = (ctx.args.window_size[0] / GRID_SQUARE).ceil() as u64;
+        let num_rows = (ctx.args.window_size[1] / GRID_SQUARE).ceil() as u64;
+        for i in 0..num_cols {
+            for j in 0..num_rows {
+                if (i + j) % 2 == 0 {
+                    continue;
+                }
+                let x = i as f64 * GRID_SQUARE;
+                let y = j as f64 * GRID_SQUARE;
+                rectangle(bg_dark, [x, y, GRID_SQUARE, GRID_SQUARE], transform, gl);
+            }
+        }
+
+        self.snake.draw(ctx, gl, &());
+        self.food.draw(ctx, gl, &());
+    }
+}
+
 impl Runnable for SnakeGame {
+    type DrawingArgs = ();
+    type UpdateArgs = ();
+    type HandlerArgs = ();
+
     fn window_size(&self) -> Size {
         Size {
             width: WIDTH,
@@ -35,15 +87,15 @@ impl Runnable for SnakeGame {
         }
     }
 
-    fn to_draw(&self) -> Vec<&dyn Drawable> {
-        vec![&self.food, &self.snake]
+    fn to_draw(&self) -> Vec<(&dyn Drawable<DrawingArgs = ()>, &())> {
+        vec![(self, &())]
     }
 
-    fn to_update(&mut self) -> Vec<&mut dyn Updatable> {
-        vec![&mut self.snake]
+    fn to_update(&mut self) -> Vec<(&mut dyn Updatable<UpdateArgs = ()>, &())> {
+        vec![(self, &())]
     }
 
-    fn handlers(&mut self) -> Vec<&mut dyn InputHandler> {
-        vec![&mut self.snake]
+    fn handlers(&mut self) -> Vec<(&mut dyn InputHandler<HandlerArgs = ()>, &())> {
+        vec![(&mut self.snake, &())]
     }
 }

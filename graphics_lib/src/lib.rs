@@ -19,6 +19,9 @@ pub struct UpdateContext<'a> {
 }
 
 impl<'a> DrawingContext<'a> {
+    pub fn id_trans(&self) -> [[f64; 3]; 2] {
+        self.context.transform.scale(1.0, 1.0)
+    }
     pub fn center_trans(&self) -> [[f64; 3]; 2] {
         self.context.transform.trans(
             self.args.window_size[0] / 2.0,
@@ -30,25 +33,47 @@ impl<'a> DrawingContext<'a> {
 pub trait Runnable {
     fn window_size(&self) -> Size;
 
-    fn to_draw(&self) -> Vec<&dyn Drawable> {
+    type DrawingArgs;
+    type UpdateArgs;
+    type HandlerArgs;
+
+    fn to_draw(
+        &self,
+    ) -> Vec<(
+        &dyn Drawable<DrawingArgs = Self::DrawingArgs>,
+        &Self::DrawingArgs,
+    )> {
         vec![]
     }
-    fn to_update(&mut self) -> Vec<&mut dyn Updatable> {
+    fn to_update(
+        &mut self,
+    ) -> Vec<(
+        &mut dyn Updatable<UpdateArgs = Self::UpdateArgs>,
+        &Self::UpdateArgs,
+    )> {
         vec![]
     }
-    fn handlers(&mut self) -> Vec<&mut dyn InputHandler> {
+    fn handlers(
+        &mut self,
+    ) -> Vec<(
+        &mut dyn InputHandler<HandlerArgs = Self::HandlerArgs>,
+        &Self::HandlerArgs,
+    )> {
         vec![]
     }
 }
 
 pub trait InputHandler {
-    fn handle(&mut self, _: &ButtonArgs) {}
+    type HandlerArgs;
+    fn handle(&mut self, bt_args: &ButtonArgs, args: &Self::HandlerArgs);
 }
 
 pub trait Drawable {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics);
+    type DrawingArgs;
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, args: &Self::DrawingArgs);
 }
 
 pub trait Updatable {
-    fn update(&mut self, ctx: &UpdateContext);
+    type UpdateArgs;
+    fn update(&mut self, ctx: &UpdateContext, args: &Self::UpdateArgs);
 }

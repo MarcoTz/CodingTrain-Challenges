@@ -1,31 +1,38 @@
 use super::{GRID_SQUARE, X_RES, Y_RES};
-use graphics::{rectangle, types::Color};
+use graphics::{circle_arc, ellipse, rectangle, types::Color};
 use graphics_lib::{Drawable, DrawingContext};
 use opengl_graphics::GlGraphics;
+use std::f64::consts::PI;
 
 pub struct Food {
-    x: i32,
-    y: i32,
+    pub x: u64,
+    pub y: u64,
     color: Color,
 }
 
 impl Food {
     pub fn new() -> Food {
-        let x = (X_RES * 0.5 * (rand::random::<f64>() - 1.0)).round() as i32;
-        let y = (Y_RES * 0.5 * (rand::random::<f64>() - 1.0)).round() as i32;
+        let x = (X_RES * 0.5 * rand::random::<f64>()).round() as u64;
+        let y = (Y_RES * 0.5 * rand::random::<f64>()).round() as u64;
         Food {
             x,
             y,
-            color: [0.0, 1.0, 1.0, 1.0],
+            color: [1.0, 0.3, 0.0, 1.0],
         }
     }
 }
 
 impl Drawable for Food {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
-        let transform = ctx.center_trans();
-        let x = self.x as f64 * GRID_SQUARE;
-        let y = self.y as f64 * GRID_SQUARE;
-        rectangle(self.color, [x, y, GRID_SQUARE, GRID_SQUARE], transform, gl);
+    type DrawingArgs = ();
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+        let transform = ctx.id_trans();
+        let x = (self.x as f64 + 0.1) * GRID_SQUARE;
+        let y = (self.y as f64 + 0.1) * GRID_SQUARE;
+        ellipse(
+            self.color,
+            [x, y, 0.8 * GRID_SQUARE, 0.8 * GRID_SQUARE],
+            transform,
+            gl,
+        );
     }
 }

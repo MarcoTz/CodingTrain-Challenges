@@ -10,15 +10,15 @@ use piston::{
 };
 use window::Window;
 
-pub struct App {
+pub struct App<T: Runnable> {
     gl: GlGraphics,
     window: GlutinWindow,
     events: Events,
-    runnable: Box<dyn Runnable>,
+    runnable: T,
 }
 
-impl App {
-    pub fn new(runnable: Box<dyn Runnable>) -> App {
+impl<T: Runnable> App<T> {
+    pub fn new(runnable: T) -> App<T> {
         let size = runnable.window_size();
         let opengl = OpenGL::V3_2;
         let window: GlutinWindow =
@@ -41,8 +41,8 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             clear(BG, gl);
             let context = DrawingContext { context: c, args };
-            for object in self.runnable.to_draw().iter() {
-                object.draw(&context, gl);
+            for (object, args) in self.runnable.to_draw().iter() {
+                object.draw(&context, gl, args);
             }
         });
     }
@@ -54,14 +54,14 @@ impl App {
             window_height: size.height,
             args,
         };
-        for object in self.runnable.to_update().iter_mut() {
-            object.update(&ctx);
+        for (object, args) in self.runnable.to_update().iter_mut() {
+            object.update(&ctx, args);
         }
     }
 
-    fn handle_input(&mut self, args: &ButtonArgs) {
-        for object in self.runnable.handlers().iter_mut() {
-            object.handle(args);
+    fn handle_input(&mut self, bt_args: &ButtonArgs) {
+        for (object, args) in self.runnable.handlers().iter_mut() {
+            object.handle(bt_args, args);
         }
     }
 
