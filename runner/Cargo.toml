@@ -8,4 +8,5 @@ graphics_lib = { path="../graphics_lib" }
 starfield = { path="../001_starfield" }
 mengersponge = { path="../002_mengersponge" }
 snake = { path="../003_snake" }
-purplerain = {path="../004_purplerain" }
+purplerain = { path="../004_purplerain" }
+spaceinvaders= { path="../005_spaceinvaders" }
