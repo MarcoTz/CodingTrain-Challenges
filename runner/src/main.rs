@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(snake::SnakeGame::new()).run();
+        return App::new(purplerain::RainCloud::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -23,6 +23,7 @@ fn run_app(args: &mut env::Args) {
         1 => App::new(starfield::StarSpawner::new()).run(),
         2 => App::new(mengersponge::Menger::new()).run(),
         3 => App::new(snake::SnakeGame::new()).run(),
+        4 => App::new(purplerain::RainCloud::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

@@ -4,7 +4,9 @@ members = [
   "graphics_lib",
   "001_starfield",
   "002_mengersponge",
-  "003_snake"]
+  "003_snake",
+  "004_purplerain"
+]
 
 resolver = "2"
 default-members = ["runner"]
