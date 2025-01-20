@@ -22,8 +22,7 @@ impl Food {
 }
 
 impl Drawable for Food {
-    type DrawingArgs = ();
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.id_trans();
         let x = (self.x as f64 + 0.1) * GRID_SQUARE;
         let y = (self.y as f64 + 0.1) * GRID_SQUARE;

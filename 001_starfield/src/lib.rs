@@ -1,5 +1,7 @@
 use graphics::{circle_arc, line};
-use graphics_lib::{point::Point, Drawable, DrawingContext, Runnable, Updatable, UpdateContext};
+use graphics_lib::{
+    point::Point, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
+};
 use opengl_graphics::GlGraphics;
 use std::f64::consts::PI;
 use window::Size;
@@ -30,8 +32,7 @@ impl Star {
 }
 
 impl Drawable for Star {
-    type DrawingArgs = ();
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.center_trans();
         let mut shortened = self.pos;
         shortened.set_abs(self.pos.abs() - self.len);
@@ -66,8 +67,7 @@ impl Drawable for Star {
 }
 
 impl Updatable for Star {
-    type UpdateArgs = ();
-    fn update(&mut self, ctx: &UpdateContext, _: &()) {
+    fn update(&mut self, ctx: &UpdateContext) {
         self.pos.set_abs(self.pos.abs() + ctx.args.dt * RAY_SPEED);
     }
 }
@@ -89,20 +89,18 @@ impl Default for StarSpawner {
 }
 
 impl Drawable for StarSpawner {
-    type DrawingArgs = ();
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         for star in self.stars.iter() {
-            star.draw(ctx, gl, &());
+            star.draw(ctx, gl);
         }
     }
 }
 
 impl Updatable for StarSpawner {
-    type UpdateArgs = ();
-    fn update(&mut self, ctx: &UpdateContext, _: &()) {
+    fn update(&mut self, ctx: &UpdateContext) {
         let mut to_remove = vec![];
         for (ind, star) in self.stars.iter_mut().enumerate() {
-            star.update(ctx, &());
+            star.update(ctx);
             if star.pos.x > ctx.window_width / 2.0
                 || star.pos.x < -ctx.window_width / 2.0
                 || star.pos.y > ctx.window_height / 2.0
@@ -122,23 +120,13 @@ impl Updatable for StarSpawner {
     }
 }
 
-impl Runnable for StarSpawner {
-    type DrawingArgs = ();
-    type UpdateArgs = ();
-    type HandlerArgs = ();
+impl InputHandler for StarSpawner {}
 
+impl Runnable for StarSpawner {
     fn window_size(&self) -> Size {
         Size {
             width: WINDOW_WIDTH,
             height: WINDOW_HEIGHT,
         }
-    }
-
-    fn to_draw(&self) -> Vec<(&dyn Drawable<DrawingArgs = ()>, &())> {
-        vec![(self, &())]
-    }
-
-    fn to_update(&mut self) -> Vec<(&mut dyn Updatable<UpdateArgs = ()>, &())> {
-        vec![(self, &())]
     }
 }

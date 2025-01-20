@@ -41,9 +41,7 @@ impl<T: Runnable> App<T> {
         self.gl.draw(args.viewport(), |c, gl| {
             clear(BG, gl);
             let context = DrawingContext { context: c, args };
-            for (object, args) in self.runnable.to_draw().iter() {
-                object.draw(&context, gl, args);
-            }
+            self.runnable.draw(&context, gl);
         });
     }
 
@@ -54,15 +52,11 @@ impl<T: Runnable> App<T> {
             window_height: size.height,
             args,
         };
-        for (object, args) in self.runnable.to_update().iter_mut() {
-            object.update(&ctx, args);
-        }
+        self.runnable.update(&ctx)
     }
 
     fn handle_input(&mut self, bt_args: &ButtonArgs) {
-        for (object, args) in self.runnable.handlers().iter_mut() {
-            object.handle(bt_args, args);
-        }
+        self.runnable.handle(bt_args)
     }
 
     pub fn run(&mut self) {

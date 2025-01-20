@@ -30,50 +30,18 @@ impl<'a> DrawingContext<'a> {
     }
 }
 
-pub trait Runnable {
+pub trait Runnable: Drawable + Updatable + InputHandler {
     fn window_size(&self) -> Size;
-
-    type DrawingArgs;
-    type UpdateArgs;
-    type HandlerArgs;
-
-    fn to_draw(
-        &self,
-    ) -> Vec<(
-        &dyn Drawable<DrawingArgs = Self::DrawingArgs>,
-        &Self::DrawingArgs,
-    )> {
-        vec![]
-    }
-    fn to_update(
-        &mut self,
-    ) -> Vec<(
-        &mut dyn Updatable<UpdateArgs = Self::UpdateArgs>,
-        &Self::UpdateArgs,
-    )> {
-        vec![]
-    }
-    fn handlers(
-        &mut self,
-    ) -> Vec<(
-        &mut dyn InputHandler<HandlerArgs = Self::HandlerArgs>,
-        &Self::HandlerArgs,
-    )> {
-        vec![]
-    }
 }
 
 pub trait InputHandler {
-    type HandlerArgs;
-    fn handle(&mut self, bt_args: &ButtonArgs, args: &Self::HandlerArgs);
+    fn handle(&mut self, _: &ButtonArgs) {}
 }
 
 pub trait Drawable {
-    type DrawingArgs;
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, args: &Self::DrawingArgs);
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics);
 }
 
 pub trait Updatable {
-    type UpdateArgs;
-    fn update(&mut self, ctx: &UpdateContext, args: &Self::UpdateArgs);
+    fn update(&mut self, _: &UpdateContext) {}
 }

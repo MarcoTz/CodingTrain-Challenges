@@ -17,18 +17,23 @@ struct BodySegment {
     x: u64,
     y: u64,
     full: bool,
+    color: Color,
 }
 
 impl BodySegment {
-    fn new(x: u64, y: u64) -> BodySegment {
-        BodySegment { x, y, full: false }
+    fn new(x: u64, y: u64, color: Color) -> BodySegment {
+        BodySegment {
+            x,
+            y,
+            full: false,
+            color,
+        }
     }
 }
 
 pub struct Snake {
     tail: Vec<BodySegment>,
     speed: f64,
-    color: Color,
     dir: Dir,
     tick: f64,
 }
@@ -37,8 +42,7 @@ impl Snake {
     pub fn new(center_x: u64, center_y: u64) -> Snake {
         Snake {
             dir: Dir::Right,
-            tail: vec![BodySegment::new(center_x, center_y)],
-            color: [0.3, 0.3, 1.0, 1.0],
+            tail: vec![BodySegment::new(center_x, center_y, [0.3, 0.3, 1.0, 1.0])],
             speed: 5.0,
             tick: 0.0,
         }
@@ -69,8 +73,7 @@ impl Snake {
 }
 
 impl Drawable for BodySegment {
-    type DrawingArgs = Color;
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, color: &Color) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let mut x = (self.x as f64 + 0.1) * GRID_SQUARE;
         let mut y = (self.y as f64 + 0.1) * GRID_SQUARE;
         let transform = ctx.id_trans();
@@ -81,22 +84,20 @@ impl Drawable for BodySegment {
             y -= 0.1 * GRID_SQUARE;
         }
 
-        rectangle(*color, [x, y, size, size], transform, gl);
+        rectangle(self.color, [x, y, size, size], transform, gl);
     }
 }
 
 impl Drawable for Snake {
-    type DrawingArgs = ();
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         for seg in self.tail.iter() {
-            seg.draw(ctx, gl, &self.color);
+            seg.draw(ctx, gl);
         }
     }
 }
 
 impl Updatable for Snake {
-    type UpdateArgs = ();
-    fn update(&mut self, ctx: &UpdateContext, _: &()) {
+    fn update(&mut self, ctx: &UpdateContext) {
         self.tick += ctx.args.dt * self.speed;
         if self.tick < 1.0 {
             return;
@@ -125,8 +126,7 @@ impl Updatable for Snake {
 }
 
 impl InputHandler for Snake {
-    type HandlerArgs = ();
-    fn handle(&mut self, args: &ButtonArgs, _: &()) {
+    fn handle(&mut self, args: &ButtonArgs) {
         let key = if let Button::Keyboard(key) = args.button {
             key
         } else {

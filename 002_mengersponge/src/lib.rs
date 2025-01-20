@@ -1,5 +1,5 @@
 use graphics::rectangle;
-use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable};
+use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable, Updatable};
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonArgs, ButtonState, Key};
 use window::Size;
@@ -24,9 +24,7 @@ impl Default for Menger {
 }
 
 impl Drawable for Menger {
-    type DrawingArgs = ();
-
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.center_trans();
         let mut width = ctx.args.window_size[0] / 1.5;
         width = width + ((3 - width as u64 % 3) as f64);
@@ -65,9 +63,7 @@ impl Drawable for Menger {
 }
 
 impl InputHandler for Menger {
-    type HandlerArgs = ();
-
-    fn handle(&mut self, args: &ButtonArgs, _: &()) {
+    fn handle(&mut self, args: &ButtonArgs) {
         if args.state != ButtonState::Release {
             return;
         }
@@ -84,22 +80,13 @@ impl InputHandler for Menger {
     }
 }
 
-impl Runnable for Menger {
-    type DrawingArgs = ();
-    type UpdateArgs = ();
-    type HandlerArgs = ();
+impl Updatable for Menger {}
 
+impl Runnable for Menger {
     fn window_size(&self) -> Size {
         Size {
             width: WINDOW_WIDTH,
             height: WINDOW_HEIGHT,
         }
-    }
-
-    fn to_draw(&self) -> Vec<(&dyn Drawable<DrawingArgs = ()>, &())> {
-        vec![(self, &())]
-    }
-    fn handlers(&mut self) -> Vec<(&mut dyn InputHandler<HandlerArgs = ()>, &())> {
-        vec![(self, &())]
     }
 }

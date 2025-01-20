@@ -1,6 +1,7 @@
 use graphics::{clear, rectangle};
 use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext};
 use opengl_graphics::GlGraphics;
+use piston::ButtonArgs;
 use window::Size;
 
 mod food;
@@ -36,9 +37,8 @@ impl Default for SnakeGame {
 }
 
 impl Updatable for SnakeGame {
-    type UpdateArgs = ();
-    fn update(&mut self, ctx: &UpdateContext, _: &()) {
-        self.snake.update(ctx, &());
+    fn update(&mut self, ctx: &UpdateContext) {
+        self.snake.update(ctx);
         let snake_pos = self.snake.pos();
         if snake_pos.0 == self.food.x && snake_pos.1 == self.food.y {
             self.food = Food::new();
@@ -51,8 +51,7 @@ impl Updatable for SnakeGame {
 }
 
 impl Drawable for SnakeGame {
-    type DrawingArgs = ();
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics, _: &()) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.id_trans();
         let bg_light = [0.0, 1.0, 0.0, 1.0];
         let bg_dark = [0.5, 1.0, 0.0, 1.0];
@@ -70,32 +69,22 @@ impl Drawable for SnakeGame {
             }
         }
 
-        self.snake.draw(ctx, gl, &());
-        self.food.draw(ctx, gl, &());
+        self.snake.draw(ctx, gl);
+        self.food.draw(ctx, gl);
+    }
+}
+
+impl InputHandler for SnakeGame {
+    fn handle(&mut self, args: &ButtonArgs) {
+        self.snake.handle(args);
     }
 }
 
 impl Runnable for SnakeGame {
-    type DrawingArgs = ();
-    type UpdateArgs = ();
-    type HandlerArgs = ();
-
     fn window_size(&self) -> Size {
         Size {
             width: WIDTH,
             height: HEIGHT,
         }
-    }
-
-    fn to_draw(&self) -> Vec<(&dyn Drawable<DrawingArgs = ()>, &())> {
-        vec![(self, &())]
-    }
-
-    fn to_update(&mut self) -> Vec<(&mut dyn Updatable<UpdateArgs = ()>, &())> {
-        vec![(self, &())]
-    }
-
-    fn handlers(&mut self) -> Vec<(&mut dyn InputHandler<HandlerArgs = ()>, &())> {
-        vec![(&mut self.snake, &())]
     }
 }
