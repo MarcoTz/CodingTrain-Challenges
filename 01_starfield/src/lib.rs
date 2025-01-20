@@ -1,17 +1,11 @@
 use graphics::{circle_arc, line};
-use graphics_lib::{
-    app::App,
-    drawable::{Drawable, TransformMatrix},
-    input_handler::InputHandler,
-    point::Point,
-};
+use graphics_lib::{point::Point, Drawable, DrawingContext, Runnable, Updatable, UpdateContext};
 use opengl_graphics::GlGraphics;
-use piston::input::{RenderArgs, UpdateArgs};
 use std::f64::consts::PI;
+use window::Size;
 
-const WINDOW_HEIGHT: f64 = 700.0;
-const WINDOW_WIDTH: f64 = 700.0;
-
+const WINDOW_HEIGHT: f64 = 600.0;
+const WINDOW_WIDTH: f64 = 600.0;
 const LINE_THICKNESS: f64 = 0.5;
 const MAX_TAIL_LENGTH: f64 = 200.0;
 const MIN_TAIL_LENGTH: f64 = 50.0;
@@ -36,9 +30,11 @@ impl Star {
 }
 
 impl Drawable for Star {
-    fn draw(&self, _: &RenderArgs, gl: &mut GlGraphics, transform: TransformMatrix) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+        let transform = ctx.center_trans();
         let mut shortened = self.pos.clone();
         shortened.set_abs(self.pos.abs() - self.len);
+
         if shortened.abs() < self.len {
             return;
         }
@@ -66,47 +62,41 @@ impl Drawable for Star {
             gl,
         );
     }
+}
 
-    fn update(&mut self, args: &UpdateArgs) {
-        self.pos.set_abs(self.pos.abs() + args.dt * RAY_SPEED);
+impl Updatable for Star {
+    fn update(&mut self, ctx: &UpdateContext) {
+        self.pos.set_abs(self.pos.abs() + ctx.args.dt * RAY_SPEED);
     }
 }
 
-struct StarSpawner {
+pub struct StarSpawner {
     stars: Vec<Star>,
-    max_x: f64,
-    max_y: f64,
-    min_x: f64,
-    min_y: f64,
 }
 
 impl StarSpawner {
-    fn new(window_width: f64, window_height: f64) -> StarSpawner {
-        StarSpawner {
-            stars: vec![],
-            min_x: -window_width / 2.0,
-            max_x: window_width / 2.0,
-            min_y: -window_height / 2.0,
-            max_y: window_height / 2.0,
-        }
+    pub fn new() -> StarSpawner {
+        StarSpawner { stars: vec![] }
     }
 }
 
 impl Drawable for StarSpawner {
-    fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics, transform: TransformMatrix) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         for star in self.stars.iter() {
-            star.draw(args, gl, transform);
+            star.draw(ctx, gl);
         }
     }
+}
 
-    fn update(&mut self, args: &UpdateArgs) {
+impl Updatable for StarSpawner {
+    fn update(&mut self, ctx: &UpdateContext) {
         let mut to_remove = vec![];
         for (ind, star) in self.stars.iter_mut().enumerate() {
-            star.update(args);
-            if star.pos.x > self.max_x
-                || star.pos.x < self.min_x
-                || star.pos.y > self.max_y
-                || star.pos.y < self.min_y
+            star.update(ctx);
+            if star.pos.x > ctx.window_width / 2.0
+                || star.pos.x < -ctx.window_width / 2.0
+                || star.pos.y > ctx.window_height / 2.0
+                || star.pos.y < -ctx.window_height / 2.0
             {
                 to_remove.push(ind)
             }
@@ -122,11 +112,19 @@ impl Drawable for StarSpawner {
     }
 }
 
-impl InputHandler for StarSpawner {}
+impl Runnable for StarSpawner {
+    fn window_size(&self) -> Size {
+        Size {
+            width: WINDOW_WIDTH,
+            height: WINDOW_HEIGHT,
+        }
+    }
 
-pub fn run() {
-    let mut app = App::new(WINDOW_WIDTH, WINDOW_HEIGHT);
-    let spawner = StarSpawner::new(WINDOW_WIDTH, WINDOW_HEIGHT);
-    app.add_object(spawner);
-    app.run();
+    fn to_draw(&self) -> Vec<&(dyn Drawable)> {
+        vec![self]
+    }
+
+    fn to_update(&mut self) -> Vec<&mut dyn Updatable> {
+        vec![self]
+    }
 }

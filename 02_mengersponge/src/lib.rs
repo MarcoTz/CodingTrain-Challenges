@@ -1,30 +1,28 @@
 use graphics::rectangle;
-use graphics_lib::{
-    app::App,
-    drawable::{Drawable, TransformMatrix},
-    input_handler::InputHandler,
-};
+use graphics_lib::{app::App, Drawable, DrawingContext, InputHandler, Runnable};
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonArgs, ButtonState, Key, RenderArgs, UpdateArgs};
+use window::Size;
 
 const WINDOW_WIDTH: f64 = 1000.0;
 const WINDOW_HEIGHT: f64 = 1000.0;
 
-struct Menger {
+pub struct Menger {
     iteration: u32,
 }
 
 impl Menger {
-    fn new() -> Menger {
+    pub fn new() -> Menger {
         Menger { iteration: 0 }
     }
 }
 
 impl Drawable for Menger {
-    fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics, transform: TransformMatrix) {
-        let mut width = args.draw_size[0] as f64 / 5.0;
+    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+        let transform = ctx.center_trans();
+        let mut width = ctx.args.window_size[0] as f64 / 1.5;
         width = width + ((3 - width as u64 % 3) as f64);
-        let mut height = args.draw_size[1] as f64 / 5.0;
+        let mut height = ctx.args.window_size[1] as f64 / 1.5;
         height = height + ((3 - height as u64 % 3) as f64);
 
         let start_x = -width / 2.0;
@@ -56,8 +54,6 @@ impl Drawable for Menger {
             }
         }
     }
-
-    fn update(&mut self, _: &UpdateArgs) {}
 }
 
 impl InputHandler for Menger {
@@ -78,8 +74,18 @@ impl InputHandler for Menger {
     }
 }
 
-pub fn run() {
-    let mut app = App::new(WINDOW_WIDTH, WINDOW_HEIGHT);
-    app.add_object(Menger::new());
-    app.run();
+impl Runnable for Menger {
+    fn window_size(&self) -> Size {
+        Size {
+            width: WINDOW_WIDTH,
+            height: WINDOW_HEIGHT,
+        }
+    }
+
+    fn to_draw(&self) -> Vec<&dyn Drawable> {
+        vec![self]
+    }
+    fn handlers(&mut self) -> Vec<&mut dyn InputHandler> {
+        vec![self]
+    }
 }

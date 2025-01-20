@@ -1,6 +1,6 @@
-use super::Object;
+use super::{DrawingContext, Runnable, UpdateContext};
 use glutin_window::GlutinWindow;
-use graphics::{clear, Transformed};
+use graphics::clear;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::{
     event_loop::{EventSettings, Events},
@@ -8,57 +8,59 @@ use piston::{
     window::WindowSettings,
     ButtonEvent,
 };
+use window::Window;
 
 pub struct App {
     gl: GlGraphics,
     window: GlutinWindow,
     events: Events,
-    objects: Vec<Box<dyn Object>>,
+    runnable: Box<dyn Runnable>,
 }
 
 impl App {
-    pub fn new(width: f64, height: f64) -> App {
+    pub fn new(runnable: Box<dyn Runnable>) -> App {
+        let size = runnable.window_size();
         let opengl = OpenGL::V3_2;
-        let window: GlutinWindow = WindowSettings::new("spinning-square", [width, height])
-            .graphics_api(opengl)
-            .exit_on_esc(true)
-            .build()
-            .unwrap();
+        let window: GlutinWindow =
+            WindowSettings::new("spinning-square", [size.width, size.height])
+                .graphics_api(opengl)
+                .exit_on_esc(true)
+                .build()
+                .unwrap();
         let events = Events::new(EventSettings::new());
         App {
             window,
             events,
             gl: GlGraphics::new(opengl),
-            objects: vec![],
+            runnable,
         }
     }
 
-    pub fn add_object<T: 'static + Object>(&mut self, obj: T) {
-        self.objects.push(Box::new(obj))
-    }
-
     fn render(&mut self, args: &RenderArgs) {
-        let (center_x, center_y) = (args.window_size[0] / 2.0, args.window_size[1] / 2.0);
-
         const BG: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
         self.gl.draw(args.viewport(), |c, gl| {
-            let transform = c.transform.trans(center_x, center_y);
-            for object in self.objects.iter() {
-                object.draw(args, gl, transform);
-            }
-
             clear(BG, gl);
+            let context = DrawingContext { context: c, args };
+            for object in self.runnable.to_draw().iter() {
+                object.draw(&context, gl);
+            }
         });
     }
 
     fn update(&mut self, args: &UpdateArgs) {
-        for object in self.objects.iter_mut() {
-            object.update(&args);
+        let size = self.window.size();
+        let ctx = UpdateContext {
+            window_width: size.width,
+            window_height: size.height,
+            args,
+        };
+        for object in self.runnable.to_update().iter_mut() {
+            object.update(&ctx);
         }
     }
 
     fn handle_input(&mut self, args: &ButtonArgs) {
-        for object in self.objects.iter_mut() {
+        for object in self.runnable.handlers().iter_mut() {
             object.handle(args);
         }
     }
