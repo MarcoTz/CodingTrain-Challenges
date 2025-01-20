@@ -1,7 +1,7 @@
 use graphics::rectangle;
-use graphics_lib::{app::App, Drawable, DrawingContext, InputHandler, Runnable};
+use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable};
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonArgs, ButtonState, Key, RenderArgs, UpdateArgs};
+use piston::{Button, ButtonArgs, ButtonState, Key};
 use window::Size;
 
 const WINDOW_WIDTH: f64 = 1000.0;
@@ -17,12 +17,18 @@ impl Menger {
     }
 }
 
+impl Default for Menger {
+    fn default() -> Menger {
+        Menger::new()
+    }
+}
+
 impl Drawable for Menger {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.center_trans();
-        let mut width = ctx.args.window_size[0] as f64 / 1.5;
+        let mut width = ctx.args.window_size[0] / 1.5;
         width = width + ((3 - width as u64 % 3) as f64);
-        let mut height = ctx.args.window_size[1] as f64 / 1.5;
+        let mut height = ctx.args.window_size[1] / 1.5;
         height = height + ((3 - height as u64 % 3) as f64);
 
         let start_x = -width / 2.0;

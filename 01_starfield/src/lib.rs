@@ -32,7 +32,7 @@ impl Star {
 impl Drawable for Star {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.center_trans();
-        let mut shortened = self.pos.clone();
+        let mut shortened = self.pos;
         shortened.set_abs(self.pos.abs() - self.len);
 
         if shortened.abs() < self.len {
@@ -77,6 +77,12 @@ pub struct StarSpawner {
 impl StarSpawner {
     pub fn new() -> StarSpawner {
         StarSpawner { stars: vec![] }
+    }
+}
+
+impl Default for StarSpawner {
+    fn default() -> StarSpawner {
+        StarSpawner::new()
     }
 }
 
