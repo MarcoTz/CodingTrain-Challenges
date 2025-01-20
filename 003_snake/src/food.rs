@@ -1,8 +1,7 @@
 use super::{GRID_SQUARE, X_RES, Y_RES};
-use graphics::{circle_arc, ellipse, rectangle, types::Color};
+use graphics::{ellipse, types::Color};
 use graphics_lib::{Drawable, DrawingContext};
 use opengl_graphics::GlGraphics;
-use std::f64::consts::PI;
 
 pub struct Food {
     pub x: u64,

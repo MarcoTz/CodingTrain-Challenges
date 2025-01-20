@@ -8,9 +8,9 @@ mod snake;
 use food::Food;
 use snake::Snake;
 
-const WIDTH: f64 = 600.0;
-const HEIGHT: f64 = 600.0;
-const GRID_SQUARE: f64 = 50.0;
+const WIDTH: f64 = 800.0;
+const HEIGHT: f64 = 800.0;
+const GRID_SQUARE: f64 = 30.0;
 
 const X_RES: f64 = WIDTH / (GRID_SQUARE);
 const Y_RES: f64 = HEIGHT / (GRID_SQUARE);

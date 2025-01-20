@@ -39,7 +39,7 @@ impl Snake {
             dir: Dir::Right,
             tail: vec![BodySegment::new(center_x, center_y)],
             color: [0.3, 0.3, 1.0, 1.0],
-            speed: 2.0,
+            speed: 5.0,
             tick: 0.0,
         }
     }
@@ -64,8 +64,7 @@ impl Snake {
                 .tail
                 .iter()
                 .enumerate()
-                .find(|(ind, seg)| *ind != 0 && seg.x == head.x && seg.y == head.y)
-                .is_some()
+                .any(|(ind, seg)| ind != 0 && seg.x == head.x && seg.y == head.y)
     }
 }
 
@@ -139,7 +138,7 @@ impl InputHandler for Snake {
             Key::A | Key::Left if self.dir != Dir::Right => self.dir = Dir::Left,
             Key::S | Key::Down if self.dir != Dir::Up => self.dir = Dir::Down,
             Key::D | Key::Right if self.dir != Dir::Left => self.dir = Dir::Right,
-            _ => return,
+            _ => (),
         }
     }
 }
