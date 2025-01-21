@@ -1,7 +1,7 @@
 use graphics::rectangle;
-use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable, Updatable};
+use graphics_lib::{Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable};
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonArgs, ButtonState, Key};
+use piston::{Button, ButtonState, Key};
 use window::Size;
 
 const WINDOW_WIDTH: f64 = 1000.0;
@@ -63,11 +63,11 @@ impl Drawable for Menger {
 }
 
 impl InputHandler for Menger {
-    fn handle(&mut self, args: &ButtonArgs) {
-        if args.state != ButtonState::Release {
+    fn handle(&mut self, ctx: &HandlerContext) {
+        if ctx.args.state != ButtonState::Release {
             return;
         }
-        let key = if let Button::Keyboard(key) = args.button {
+        let key = if let Button::Keyboard(key) = ctx.args.button {
             key
         } else {
             return;

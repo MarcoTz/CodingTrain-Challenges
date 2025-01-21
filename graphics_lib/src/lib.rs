@@ -18,6 +18,12 @@ pub struct UpdateContext<'a> {
     pub args: &'a UpdateArgs,
 }
 
+pub struct HandlerContext<'a> {
+    pub window_height: f64,
+    pub window_width: f64,
+    pub args: &'a ButtonArgs,
+}
+
 impl<'a> DrawingContext<'a> {
     pub fn id_trans(&self) -> [[f64; 3]; 2] {
         self.context.transform.scale(1.0, 1.0)
@@ -35,7 +41,7 @@ pub trait Runnable: Drawable + Updatable + InputHandler {
 }
 
 pub trait InputHandler {
-    fn handle(&mut self, _: &ButtonArgs) {}
+    fn handle(&mut self, _: &HandlerContext) {}
 }
 
 pub trait Drawable {

@@ -1,8 +1,10 @@
 use super::GRID_SQUARE;
 use graphics::{rectangle, types::Color};
-use graphics_lib::{Drawable, DrawingContext, InputHandler, Updatable, UpdateContext};
+use graphics_lib::{
+    Drawable, DrawingContext, HandlerContext, InputHandler, Updatable, UpdateContext,
+};
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonArgs, Key};
+use piston::{Button, Key};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Dir {
@@ -126,8 +128,8 @@ impl Updatable for Snake {
 }
 
 impl InputHandler for Snake {
-    fn handle(&mut self, args: &ButtonArgs) {
-        let key = if let Button::Keyboard(key) = args.button {
+    fn handle(&mut self, ctx: &HandlerContext) {
+        let key = if let Button::Keyboard(key) = ctx.args.button {
             key
         } else {
             return;

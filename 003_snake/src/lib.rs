@@ -1,7 +1,8 @@
 use graphics::{clear, rectangle};
-use graphics_lib::{Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext};
+use graphics_lib::{
+    Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable, UpdateContext,
+};
 use opengl_graphics::GlGraphics;
-use piston::ButtonArgs;
 use window::Size;
 
 mod food;
@@ -75,8 +76,8 @@ impl Drawable for SnakeGame {
 }
 
 impl InputHandler for SnakeGame {
-    fn handle(&mut self, args: &ButtonArgs) {
-        self.snake.handle(args);
+    fn handle(&mut self, ctx: &HandlerContext) {
+        self.snake.handle(ctx);
     }
 }
 

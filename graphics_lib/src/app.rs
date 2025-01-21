@@ -1,4 +1,4 @@
-use super::{DrawingContext, Runnable, UpdateContext};
+use super::{DrawingContext, HandlerContext, Runnable, UpdateContext};
 use glutin_window::GlutinWindow;
 use graphics::clear;
 use opengl_graphics::{GlGraphics, OpenGL};
@@ -55,8 +55,14 @@ impl<T: Runnable> App<T> {
         self.runnable.update(&ctx)
     }
 
-    fn handle_input(&mut self, bt_args: &ButtonArgs) {
-        self.runnable.handle(bt_args)
+    fn handle_input(&mut self, args: &ButtonArgs) {
+        let size = self.window.size();
+        let ctx = HandlerContext {
+            args,
+            window_width: size.width,
+            window_height: size.height,
+        };
+        self.runnable.handle(&ctx)
     }
 
     pub fn run(&mut self) {
