@@ -1,6 +1,5 @@
 use super::{
-    alien::Alien, projectile::Projectile, ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_YSPEED, COL_DIST,
-    ROW_DIST, ROW_OFFSET,
+    alien::Alien, ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_YSPEED, COL_DIST, ROW_DIST, ROW_OFFSET,
 };
 use core::array;
 use graphics_lib::{Drawable, DrawingContext, Updatable, UpdateContext};

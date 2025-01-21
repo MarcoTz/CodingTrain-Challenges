@@ -1,6 +1,6 @@
 use graphics::{line, types::Color};
 use graphics_lib::{
-    point::Point, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
+    vec2d::Vec2D, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use window::Size;
@@ -24,7 +24,7 @@ impl RainCloud {
 }
 
 struct RainDrop {
-    pos: Point,
+    pos: Vec2D,
     velocity: f64,
     thickness: f64,
     length: f64,
@@ -33,7 +33,7 @@ struct RainDrop {
 impl RainDrop {
     pub fn new(max_x: f64) -> RainDrop {
         RainDrop {
-            pos: Point {
+            pos: Vec2D {
                 x: rand::random::<f64>() * max_x,
                 y: 0.0,
             },

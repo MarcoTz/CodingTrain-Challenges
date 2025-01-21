@@ -1,10 +1,10 @@
 use super::{ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_XSPEED};
 use graphics::polygon;
-use graphics_lib::{point::Point, Drawable, DrawingContext, Updatable, UpdateContext};
+use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Updatable, UpdateContext};
 use opengl_graphics::GlGraphics;
 
 pub struct Alien {
-    pub pos: Point,
+    pub pos: Vec2D,
     pub x_speed: f64,
     pub dead: bool,
 }
@@ -12,7 +12,7 @@ pub struct Alien {
 impl Alien {
     pub fn new(x: f64, y: f64) -> Alien {
         Alien {
-            pos: Point { x, y },
+            pos: Vec2D { x, y },
             x_speed: ALIEN_XSPEED,
             dead: false,
         }

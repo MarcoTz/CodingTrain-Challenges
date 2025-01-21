@@ -6,7 +6,7 @@ use piston::{
     event_loop::{EventSettings, Events},
     input::{ButtonArgs, RenderArgs, RenderEvent, UpdateArgs, UpdateEvent},
     window::WindowSettings,
-    ButtonEvent,
+    ButtonEvent, MouseCursorEvent,
 };
 use window::Window;
 
@@ -15,6 +15,7 @@ pub struct App<T: Runnable> {
     window: GlutinWindow,
     events: Events,
     runnable: T,
+    mouse_pos: [f64; 2],
 }
 
 impl<T: Runnable> App<T> {
@@ -33,6 +34,7 @@ impl<T: Runnable> App<T> {
             events,
             gl: GlGraphics::new(opengl),
             runnable,
+            mouse_pos: [0.0, 0.0],
         }
     }
 
@@ -61,6 +63,7 @@ impl<T: Runnable> App<T> {
             args,
             window_width: size.width,
             window_height: size.height,
+            mouse_pos: self.mouse_pos,
         };
         self.runnable.handle(&ctx)
     }
@@ -75,6 +78,9 @@ impl<T: Runnable> App<T> {
             }
             if let Some(args) = e.button_args() {
                 self.handle_input(&args);
+            }
+            if let Some(args) = e.mouse_cursor_args() {
+                self.mouse_pos = args;
             }
         }
     }

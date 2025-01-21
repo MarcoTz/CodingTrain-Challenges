@@ -10,3 +10,4 @@ mengersponge = { path="../002_mengersponge" }
 snake = { path="../003_snake" }
 purplerain = { path="../004_purplerain" }
 spaceinvaders= { path="../005_spaceinvaders" }
+mitosis={path="../006_mitosis"}

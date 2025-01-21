@@ -1,6 +1,6 @@
 use graphics::{circle_arc, line};
 use graphics_lib::{
-    point::Point, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
+    vec2d::Vec2D, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use std::f64::consts::PI;
@@ -15,7 +15,7 @@ const RAY_SPEED: f64 = 500.0;
 const SPAWN_RATE: f64 = 0.9;
 
 struct Star {
-    pos: Point,
+    pos: Vec2D,
     color: [f32; 4],
     len: f64,
 }
@@ -24,7 +24,7 @@ impl Star {
     fn new() -> Star {
         let dir = rand::random::<f64>() * 2.0 * PI;
         Star {
-            pos: Point::from_polar(1.0, dir),
+            pos: Vec2D::from_polar(1.0, dir),
             color: [rand::random(), rand::random(), rand::random(), 1.0],
             len: MIN_TAIL_LENGTH + (rand::random::<f64>() * (MAX_TAIL_LENGTH - MIN_TAIL_LENGTH)),
         }

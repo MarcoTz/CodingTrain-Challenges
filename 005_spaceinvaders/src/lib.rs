@@ -1,7 +1,7 @@
 use core::array;
 use graphics::ellipse;
 use graphics_lib::{
-    point::Point, Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable,
+    vec2d::Vec2D, Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable,
     UpdateContext,
 };
 use opengl_graphics::GlGraphics;
@@ -35,7 +35,7 @@ const HEIGHT: f64 = 900.0;
 
 pub struct SpaceInvaders {
     ship: SpaceShip,
-    background_stars: [Point; 3000],
+    background_stars: [Vec2D; 3000],
     aliens: AlienShip<NUM_ROWS, NUM_COLS>,
 }
 
@@ -43,7 +43,7 @@ impl SpaceInvaders {
     pub fn new() -> SpaceInvaders {
         SpaceInvaders {
             ship: SpaceShip::new(),
-            background_stars: array::from_fn(|_| Point {
+            background_stars: array::from_fn(|_| Vec2D {
                 x: rand::random::<f64>() * 2.0 * WIDTH,
                 y: rand::random::<f64>() * 2.0 * HEIGHT,
             }),

@@ -1,5 +1,5 @@
 pub mod app;
-pub mod point;
+pub mod vec2d;
 
 use graphics::{Context, Transformed};
 use opengl_graphics::GlGraphics;
@@ -21,6 +21,7 @@ pub struct UpdateContext<'a> {
 pub struct HandlerContext<'a> {
     pub window_height: f64,
     pub window_width: f64,
+    pub mouse_pos: [f64; 2],
     pub args: &'a ButtonArgs,
 }
 
