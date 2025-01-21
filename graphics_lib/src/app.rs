@@ -1,4 +1,4 @@
-use super::{DrawingContext, HandlerContext, Runnable, SetupContext, UpdateContext};
+use super::{DrawingContext, InputContext, Runnable, SetupContext, UpdateContext};
 use glutin_window::GlutinWindow;
 use graphics::clear;
 use opengl_graphics::{GlGraphics, OpenGL};
@@ -6,7 +6,7 @@ use piston::{
     event_loop::{EventSettings, Events},
     input::{ButtonArgs, RenderArgs, RenderEvent, UpdateArgs, UpdateEvent},
     window::WindowSettings,
-    ButtonEvent, MouseCursorEvent,
+    ButtonEvent, MouseCursorEvent, ResizeEvent,
 };
 use window::Window;
 
@@ -59,13 +59,13 @@ impl<T: Runnable> App<T> {
 
     fn handle_input(&mut self, args: &ButtonArgs) {
         let size = self.window.size();
-        let ctx = HandlerContext {
+        let ctx = InputContext {
             args,
             window_width: size.width,
             window_height: size.height,
             mouse_pos: self.mouse_pos,
         };
-        self.runnable.handle(&ctx)
+        self.runnable.handle_input(&ctx)
     }
 
     pub fn run(&mut self) {
@@ -86,6 +86,9 @@ impl<T: Runnable> App<T> {
             }
             if let Some(args) = e.mouse_cursor_args() {
                 self.mouse_pos = args;
+            }
+            if let Some(args) = e.resize_args() {
+                self.runnable.handle_resize(&args)
             }
         }
     }

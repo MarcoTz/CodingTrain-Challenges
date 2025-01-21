@@ -1,7 +1,7 @@
 use core::array;
 use graphics::ellipse;
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable,
     UpdateContext,
 };
 use opengl_graphics::GlGraphics;
@@ -103,9 +103,9 @@ impl Drawable for SpaceInvaders {
     }
 }
 
-impl InputHandler for SpaceInvaders {
-    fn handle(&mut self, args: &HandlerContext) {
-        self.ship.handle(args)
+impl EventHandler for SpaceInvaders {
+    fn handle_input(&mut self, args: &InputContext) {
+        self.ship.handle_input(args)
     }
 }
 

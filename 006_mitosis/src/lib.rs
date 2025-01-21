@@ -1,6 +1,6 @@
 use graphics::{ellipse, types::Color};
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable,
     UpdateContext,
 };
 use opengl_graphics::GlGraphics;
@@ -112,8 +112,8 @@ impl Updatable for Cell {
     }
 }
 
-impl InputHandler for Mitosis {
-    fn handle(&mut self, ctx: &HandlerContext) {
+impl EventHandler for Mitosis {
+    fn handle_input(&mut self, ctx: &InputContext) {
         if ctx.args.state != ButtonState::Release
             || ctx.args.button != Button::Mouse(MouseButton::Left)
         {

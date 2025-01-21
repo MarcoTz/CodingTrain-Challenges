@@ -1,5 +1,5 @@
 use graphics::rectangle;
-use graphics_lib::{Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable};
+use graphics_lib::{Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable};
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key};
 use window::Size;
@@ -62,8 +62,8 @@ impl Drawable for Menger {
     }
 }
 
-impl InputHandler for Menger {
-    fn handle(&mut self, ctx: &HandlerContext) {
+impl EventHandler for Menger {
+    fn handle_input(&mut self, ctx: &InputContext) {
         if ctx.args.state != ButtonState::Release {
             return;
         }

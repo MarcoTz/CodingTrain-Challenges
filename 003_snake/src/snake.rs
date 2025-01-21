@@ -1,7 +1,7 @@
 use super::GRID_SQUARE;
 use graphics::{rectangle, types::Color};
 use graphics_lib::{
-    Drawable, DrawingContext, HandlerContext, InputHandler, Updatable, UpdateContext,
+    Drawable, DrawingContext, EventHandler, InputContext, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use piston::{Button, Key};
@@ -127,8 +127,8 @@ impl Updatable for Snake {
     }
 }
 
-impl InputHandler for Snake {
-    fn handle(&mut self, ctx: &HandlerContext) {
+impl EventHandler for Snake {
+    fn handle_input(&mut self, ctx: &InputContext) {
         let key = if let Button::Keyboard(key) = ctx.args.button {
             key
         } else {

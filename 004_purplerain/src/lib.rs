@@ -1,6 +1,6 @@
 use graphics::{line, types::Color};
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use window::Size;
@@ -92,7 +92,7 @@ impl Drawable for RainCloud {
     }
 }
 
-impl InputHandler for RainCloud {}
+impl EventHandler for RainCloud {}
 
 impl Runnable for RainCloud {
     fn window_size(&self) -> Size {

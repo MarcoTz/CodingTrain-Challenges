@@ -1,6 +1,6 @@
 use graphics::{circle_arc, line};
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, InputHandler, Runnable, Updatable, UpdateContext,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use std::f64::consts::PI;
@@ -120,7 +120,7 @@ impl Updatable for StarSpawner {
     }
 }
 
-impl InputHandler for StarSpawner {}
+impl EventHandler for StarSpawner {}
 
 impl Runnable for StarSpawner {
     fn window_size(&self) -> Size {

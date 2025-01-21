@@ -4,7 +4,7 @@ pub mod vec2d;
 use graphics::{Context, Transformed};
 use opengl_graphics::GlGraphics;
 use piston::input::{RenderArgs, UpdateArgs};
-use piston::ButtonArgs;
+use piston::{ButtonArgs, ResizeArgs};
 use window::Size;
 
 pub fn rand_between(min: f64, max: f64) -> f64 {
@@ -22,7 +22,7 @@ pub struct UpdateContext<'a> {
     pub args: &'a UpdateArgs,
 }
 
-pub struct HandlerContext<'a> {
+pub struct InputContext<'a> {
     pub window_height: f64,
     pub window_width: f64,
     pub mouse_pos: [f64; 2],
@@ -45,13 +45,14 @@ impl<'a> DrawingContext<'a> {
     }
 }
 
-pub trait Runnable: Drawable + Updatable + InputHandler {
+pub trait Runnable: Drawable + Updatable + EventHandler {
     fn window_size(&self) -> Size;
-    fn setup(&mut self, ctx: &SetupContext) {}
+    fn setup(&mut self, _: &SetupContext) {}
 }
 
-pub trait InputHandler {
-    fn handle(&mut self, _: &HandlerContext) {}
+pub trait EventHandler {
+    fn handle_input(&mut self, _: &InputContext) {}
+    fn handle_resize(&mut self, _: &ResizeArgs) {}
 }
 
 pub trait Drawable {

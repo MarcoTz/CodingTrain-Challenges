@@ -1,6 +1,6 @@
 use graphics::{clear, rectangle};
 use graphics_lib::{
-    Drawable, DrawingContext, HandlerContext, InputHandler, Runnable, Updatable, UpdateContext,
+    Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use window::Size;
@@ -75,9 +75,9 @@ impl Drawable for SnakeGame {
     }
 }
 
-impl InputHandler for SnakeGame {
-    fn handle(&mut self, ctx: &HandlerContext) {
-        self.snake.handle(ctx);
+impl EventHandler for SnakeGame {
+    fn handle_input(&mut self, ctx: &InputContext) {
+        self.snake.handle_input(ctx);
     }
 }
 

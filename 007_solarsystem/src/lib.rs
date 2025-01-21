@@ -1,10 +1,10 @@
 use graphics::ellipse;
 use graphics_lib::{
-    rand_between, vec2d::Vec2D, Drawable, DrawingContext, HandlerContext, InputHandler, Runnable,
+    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable,
     SetupContext, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, MouseButton, Size};
+use piston::{Button, ButtonState, MouseButton, ResizeArgs, Size};
 use std::iter;
 
 mod body;
@@ -63,6 +63,16 @@ impl SolarSystem {
         }
         forces
     }
+
+    fn generate_background(&mut self, window_width: f64, window_height: f64) {
+        self.background_stars = vec![];
+        for _ in 1..1000 {
+            self.background_stars.push(Vec2D::new(
+                rand_between(-window_width / 2.0, window_width / 2.0),
+                rand_between(-window_height / 2.0, window_height / 2.0),
+            ));
+        }
+    }
 }
 
 impl Drawable for SolarSystem {
@@ -104,8 +114,8 @@ impl Updatable for SolarSystem {
     }
 }
 
-impl InputHandler for SolarSystem {
-    fn handle(&mut self, ctx: &HandlerContext) {
+impl EventHandler for SolarSystem {
+    fn handle_input(&mut self, ctx: &InputContext) {
         if ctx.args.state != ButtonState::Release
             || ctx.args.button != Button::Mouse(MouseButton::Left)
         {
@@ -127,6 +137,10 @@ impl InputHandler for SolarSystem {
             new_pos.tangent() * escape_velocity,
         ));
     }
+
+    fn handle_resize(&mut self, ctx: &ResizeArgs) {
+        self.generate_background(ctx.window_size[0], ctx.window_size[1]);
+    }
 }
 
 impl Runnable for SolarSystem {
@@ -138,11 +152,6 @@ impl Runnable for SolarSystem {
     }
 
     fn setup(&mut self, ctx: &SetupContext) {
-        for _ in 1..1000 {
-            self.background_stars.push(Vec2D::new(
-                rand_between(-ctx.window_width / 2.0, ctx.window_width / 2.0),
-                rand_between(-ctx.window_height / 2.0, ctx.window_height / 2.0),
-            ));
-        }
+        self.generate_background(ctx.window_width, ctx.window_height);
     }
 }

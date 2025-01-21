@@ -1,6 +1,6 @@
 use graphics::{polygon, Transformed};
 use graphics_lib::{
-    Drawable, DrawingContext, HandlerContext, InputHandler, Updatable, UpdateContext,
+    Drawable, DrawingContext, EventHandler, InputContext, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key};
@@ -73,8 +73,8 @@ impl Updatable for SpaceShip {
     }
 }
 
-impl InputHandler for SpaceShip {
-    fn handle(&mut self, ctx: &HandlerContext) {
+impl EventHandler for SpaceShip {
+    fn handle_input(&mut self, ctx: &InputContext) {
         let state = ctx.args.state;
 
         let key = if let Button::Keyboard(key) = ctx.args.button {
