@@ -1,4 +1,4 @@
-use super::{DrawingContext, HandlerContext, Runnable, UpdateContext};
+use super::{DrawingContext, HandlerContext, Runnable, SetupContext, UpdateContext};
 use glutin_window::GlutinWindow;
 use graphics::clear;
 use opengl_graphics::{GlGraphics, OpenGL};
@@ -69,6 +69,11 @@ impl<T: Runnable> App<T> {
     }
 
     pub fn run(&mut self) {
+        let size = self.window.size();
+        self.runnable.setup(&SetupContext {
+            window_width: size.width,
+            window_height: size.height,
+        });
         while let Some(e) = self.events.next(&mut self.window) {
             if let Some(args) = e.render_args() {
                 self.render(&args);

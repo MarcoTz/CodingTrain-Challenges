@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(mitosis::Mitosis::new()).run();
+        return App::new(solarsystem::SolarSystem::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -26,6 +26,7 @@ fn run_app(args: &mut env::Args) {
         4 => App::new(purplerain::RainCloud::new()).run(),
         5 => App::new(spaceinvaders::SpaceInvaders::new()).run(),
         6 => App::new(mitosis::Mitosis::new()).run(),
+        7 => App::new(solarsystem::SolarSystem::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

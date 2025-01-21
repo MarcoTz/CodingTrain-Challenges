@@ -1,10 +1,10 @@
 use std::f64::consts::PI;
 use std::{
     fmt,
-    ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
 };
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy)]
 pub struct Vec2D {
     pub x: f64,
     pub y: f64,
@@ -49,6 +49,11 @@ impl Vec2D {
         let arg = rand::random::<f64>() * 2.0 * PI;
         Vec2D::from_polar(1.0, arg)
     }
+
+    pub fn tangent(&self) -> Vec2D {
+        let arg = self.arg() + PI / 2.0;
+        Vec2D::from_polar(1.0, arg)
+    }
 }
 
 impl Add for Vec2D {
@@ -78,6 +83,13 @@ impl Sub for Vec2D {
     }
 }
 
+impl SubAssign for Vec2D {
+    fn sub_assign(&mut self, other: Vec2D) {
+        self.x -= other.x;
+        self.y -= other.y;
+    }
+}
+
 impl Mul<f64> for Vec2D {
     type Output = Vec2D;
     fn mul(self, rhs: f64) -> Self::Output {
@@ -102,6 +114,23 @@ impl MulAssign<f64> for Vec2D {
     fn mul_assign(&mut self, rhs: f64) {
         self.x *= rhs;
         self.y *= rhs;
+    }
+}
+
+impl Div<f64> for Vec2D {
+    type Output = Vec2D;
+    fn div(self, rhs: f64) -> Self::Output {
+        Vec2D {
+            x: self.x / rhs,
+            y: self.y / rhs,
+        }
+    }
+}
+
+impl DivAssign<f64> for Vec2D {
+    fn div_assign(&mut self, rhs: f64) {
+        self.x /= rhs;
+        self.y /= rhs;
     }
 }
 

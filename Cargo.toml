@@ -7,7 +7,8 @@ members = [
   "003_snake",
   "004_purplerain",
   "005_spaceinvaders",
-  "006_mitosis"
+  "006_mitosis",
+  "007_solarsystem"
 ]
 
 resolver = "2"

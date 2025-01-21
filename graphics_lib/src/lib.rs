@@ -7,6 +7,10 @@ use piston::input::{RenderArgs, UpdateArgs};
 use piston::ButtonArgs;
 use window::Size;
 
+pub fn rand_between(min: f64, max: f64) -> f64 {
+    min + rand::random::<f64>() * (max - min)
+}
+
 pub struct DrawingContext<'a> {
     pub context: Context,
     pub args: &'a RenderArgs,
@@ -25,6 +29,10 @@ pub struct HandlerContext<'a> {
     pub args: &'a ButtonArgs,
 }
 
+pub struct SetupContext {
+    pub window_height: f64,
+    pub window_width: f64,
+}
 impl<'a> DrawingContext<'a> {
     pub fn id_trans(&self) -> [[f64; 3]; 2] {
         self.context.transform.scale(1.0, 1.0)
@@ -39,6 +47,7 @@ impl<'a> DrawingContext<'a> {
 
 pub trait Runnable: Drawable + Updatable + InputHandler {
     fn window_size(&self) -> Size;
+    fn setup(&mut self, ctx: &SetupContext) {}
 }
 
 pub trait InputHandler {
