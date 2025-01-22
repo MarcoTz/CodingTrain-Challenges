@@ -8,7 +8,8 @@ members = [
   "004_purplerain",
   "005_spaceinvaders",
   "006_mitosis",
-  "007_solarsystem"
+  "007_solarsystem",
+  "010_mazegenerator"
 ]
 
 resolver = "2"
