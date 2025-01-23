@@ -3,7 +3,7 @@ use std::{
     ops::{Index, IndexMut},
 };
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Grid<T> {
     num_rows: usize,
     num_cols: usize,
@@ -19,21 +19,14 @@ impl<T> Grid<T> {
         }
     }
 
-    pub fn from_default(num_cols: usize, num_rows: usize) -> Grid<T>
-    where
-        T: Default,
-    {
+    pub fn from_fn<F: Fn(usize, usize) -> T>(fun: F, num_cols: usize, num_rows: usize) -> Grid<T> {
         let mut grid = Grid::new(num_cols, num_rows);
-        grid.init(|_, _| T::default());
-        grid
-    }
-
-    pub fn init<F: Fn(usize, usize) -> T>(&mut self, fun: F) {
-        for y in 0..self.num_rows {
-            for x in 0..self.num_cols {
-                self.elements.push(fun(x, y))
+        for y in 0..num_rows {
+            for x in 0..num_cols {
+                grid.elements.push(fun(x, y))
             }
         }
+        grid
     }
 
     fn ind(&self, x: usize, y: usize) -> Option<usize> {
@@ -76,20 +69,29 @@ impl<T> Grid<T> {
         let start_ind = self.num_cols * y;
         &self.elements[start_ind..start_ind + self.num_cols]
     }
+
+    pub fn map<F, U>(self, fun: F) -> Grid<U>
+    where
+        F: Fn(T) -> U,
+    {
+        let mut new_grid = Grid::new(self.num_cols, self.num_rows);
+        for t in self {
+            new_grid.elements.push(fun(t));
+        }
+        new_grid
+    }
 }
 
 impl Grid<f64> {
     pub fn convolute<const N: usize, const M: usize>(&self, kernel: [[f64; N]; M]) -> Grid<f64> {
-        assert!(N % 2 == 1);
-        assert!(M % 2 == 1);
-        let mut new_grid = Grid::from_default(self.num_cols, self.num_rows);
+        let mut new_grid = Grid::from_fn(|_, _| 0.0, self.num_cols, self.num_rows);
         for center_y in 0..self.num_rows {
             for center_x in 0..self.num_cols {
-                let start_x = center_x as i64 - (N as i64 - 1) / 2;
-                let start_y = center_y as i64 - (M as i64 - 1) / 2;
-                for kernel_y in 0..M {
+                let start_x = center_x as i64 - (M as i64 - 1) / 2;
+                let start_y = center_y as i64 - (N as i64 - 1) / 2;
+                for kernel_y in 0..N {
                     let y = start_y + kernel_y as i64;
-                    for kernel_x in 0..N {
+                    for kernel_x in 0..M {
                         let x = start_x + kernel_x as i64;
                         new_grid[(center_x, center_y)] +=
                             kernel[kernel_x][kernel_y] * self.get_or_default(x, y);
@@ -149,8 +151,7 @@ mod grid_tests {
 
     #[test]
     fn init_grid() {
-        let mut result = Grid::new(2, 2);
-        result.init(|x, y| (x, y));
+        let result = Grid::from_fn(|x, y| (x, y), 2, 2);
         let expected = Grid {
             num_rows: 2,
             num_cols: 2,
@@ -161,8 +162,7 @@ mod grid_tests {
 
     #[test]
     fn get_grid() {
-        let mut grid = Grid::new(5, 5);
-        grid.init(|x, y| (x, y));
+        let grid = Grid::from_fn(|x, y| (x, y), 5, 5);
         let result = grid.get(3, 4).unwrap();
         let expected = &(3, 4);
         assert_eq!(result, expected);
@@ -170,8 +170,7 @@ mod grid_tests {
 
     #[test]
     fn display_grid() {
-        let mut grid = Grid::new(2, 2);
-        grid.init(|x, y| Vec2D::new(x as f64, y as f64));
+        let grid = Grid::from_fn(|x, y| Vec2D::new(x as f64, y as f64), 2, 2);
         let result = format!("{grid}");
         let expected = "(0,0) (1,0) \n(0,1) (1,1) \n";
         assert_eq!(result, expected)
@@ -179,8 +178,7 @@ mod grid_tests {
 
     #[test]
     fn get_row() {
-        let mut grid = Grid::new(5, 5);
-        grid.init(|x, y| (x, y));
+        let grid = Grid::from_fn(|x, y| (x, y), 5, 5);
         let result = grid.row(3);
         let expected = &[(0, 3), (1, 3), (2, 3), (3, 3), (4, 3)];
         assert_eq!(result, expected)
@@ -188,22 +186,32 @@ mod grid_tests {
 
     #[test]
     fn grid_index() {
-        let mut grid = Grid::new(5, 5);
-        grid.init(|x, y| (x, y));
+        let grid = Grid::from_fn(|x, y| (x, y), 5, 5);
         let result = grid[(1, 1)];
         let expected = (1, 1);
         assert_eq!(result, expected)
     }
 
     #[test]
-    fn convolution() {
-        let mut grid = Grid::new(3, 3);
-        grid.init(|_, _| 1.0);
+    fn convolution3x3() {
+        let grid = Grid::from_fn(|_, _| 1.0, 3, 3);
         let result = grid.convolute([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]);
         let expected = Grid {
             num_rows: 3,
             num_cols: 3,
             elements: vec![4.0, 6.0, 4.0, 6.0, 9.0, 6.0, 4.0, 6.0, 4.0],
+        };
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn convolution2x3() {
+        let grid = Grid::from_fn(|_, _| 1.0, 3, 3);
+        let result = grid.convolute([[1.0, 1.0], [1.0, 1.0], [1.0, 1.0]]);
+        let expected = Grid {
+            num_rows: 3,
+            num_cols: 3,
+            elements: vec![4.0, 6.0, 4.0, 4.0, 6.0, 4.0, 2.0, 3.0, 2.0],
         };
         assert_eq!(result, expected)
     }

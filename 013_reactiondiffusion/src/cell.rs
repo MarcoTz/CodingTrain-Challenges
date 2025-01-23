@@ -53,7 +53,7 @@ impl Drawable for Cell {
 }
 
 impl Updatable for Cell {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, _: &UpdateContext) {
         let reaction = self.concentration_a * self.concentration_b * self.concentration_b;
         self.concentration_a = self.concentration_a
             + (DIFFUSION_A * self.laplace_a - reaction + FEED_RATE * (1.0 - self.concentration_a));
