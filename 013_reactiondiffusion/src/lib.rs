@@ -1,14 +1,11 @@
 use graphics::types::Color;
 use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, InputContext, Runnable, SetupContext, Updatable,
-    UpdateContext,
+    grid::Grid, Drawable, DrawingContext, EventHandler, InputContext, Runnable, SetupContext,
+    Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs, Size};
-use std::{
-    thread::sleep,
-    time::{Duration, Instant},
-};
+use std::time::{Duration, Instant};
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -79,21 +76,15 @@ impl Dir {
 pub struct ReactionDiffusion {
     running: bool,
     drawing: bool,
-    cells: Vec<Vec<Cell>>,
-    last_update: Instant,
+    cells: Grid<Cell>,
 }
 
 impl ReactionDiffusion {
     pub fn new() -> ReactionDiffusion {
-        let mut rows = Vec::with_capacity(NUM_COLS);
-        for _ in 0..NUM_ROWS {
-            rows.push(Vec::with_capacity(NUM_ROWS));
-        }
         ReactionDiffusion {
             drawing: false,
             running: false,
-            cells: rows,
-            last_update: Instant::now(),
+            cells: Grid::new(NUM_COLS, NUM_ROWS),
         }
     }
 
@@ -103,74 +94,72 @@ impl ReactionDiffusion {
                 if x == 0 {
                     None
                 } else {
-                    self.cells.get(x - 1)?.get(y)
+                    Some(&self.cells[(x - 1, y)])
                 }
             }
             Dir::Right => {
                 if x + 1 >= NUM_COLS {
                     None
                 } else {
-                    self.cells.get(x + 1)?.get(y)
+                    Some(&self.cells[(x + 1, y)])
                 }
             }
             Dir::Up => {
                 if y == 0 {
                     None
                 } else {
-                    self.cells.get(x)?.get(y - 1)
+                    Some(&self.cells[(x, y - 1)])
                 }
             }
             Dir::Down => {
                 if y + 1 >= NUM_ROWS {
                     None
                 } else {
-                    self.cells.get(x)?.get(y + 1)
+                    Some(&self.cells[(x, y + 1)])
                 }
             }
             Dir::TopLeft => {
                 if x == 0 || y == 0 {
                     None
                 } else {
-                    self.cells.get(x - 1)?.get(y - 1)
+                    Some(&self.cells[(x - 1, y - 1)])
                 }
             }
             Dir::TopRight => {
                 if x + 1 >= NUM_COLS || y == 0 {
                     None
                 } else {
-                    self.cells.get(x + 1)?.get(y - 1)
+                    Some(&self.cells[(x + 1, y - 1)])
                 }
             }
             Dir::BottomLeft => {
                 if x == 0 || y + 1 >= NUM_ROWS {
                     None
                 } else {
-                    self.cells.get(x - 1)?.get(y + 1)
+                    Some(&self.cells[(x - 1, y + 1)])
                 }
             }
             Dir::BottomRight => {
                 if x + 1 >= NUM_COLS || y + 1 >= NUM_ROWS {
                     None
                 } else {
-                    self.cells.get(x + 1)?.get(y + 1)
+                    Some(&self.cells[(x + 1, y + 1)])
                 }
             }
         }
     }
 
     fn resize_cells(&mut self, window_width: f64, window_height: f64) {
-        for row in self.cells.iter_mut() {
-            for cell in row.iter_mut() {
-                let width = window_width / NUM_COLS as f64;
-                let height = window_height / NUM_ROWS as f64;
-                cell.width = width;
-                cell.height = height;
-            }
+        for cell in self.cells.iter_mut() {
+            let width = window_width / NUM_COLS as f64;
+            let height = window_height / NUM_ROWS as f64;
+            cell.width = width;
+            cell.height = height;
         }
     }
 
     fn laplace_a(&self, x: usize, y: usize) -> f64 {
-        let mut sum = WEIGHT_CENTER * self.cells[x][y].concentration_a;
+        let mut sum = WEIGHT_CENTER * self.cells[(x, y)].concentration_a;
         for dir in Dir::all_dirs() {
             sum += dir.weight()
                 * self
@@ -182,7 +171,7 @@ impl ReactionDiffusion {
     }
 
     fn laplace_b(&self, x: usize, y: usize) -> f64 {
-        let mut sum = WEIGHT_CENTER * self.cells[x][y].concentration_b;
+        let mut sum = WEIGHT_CENTER * self.cells[(x, y)].concentration_b;
         for dir in Dir::all_dirs() {
             sum += dir.weight()
                 * self
@@ -192,51 +181,34 @@ impl ReactionDiffusion {
         }
         sum
     }
-
-    fn seed_b(&mut self) {
-        let max_x = NUM_COLS / 2 + 100; //rand::random::<usize>() % NUM_COLS;
-        let max_y = NUM_ROWS / 2 + 100; // rand::random::<usize>() % NUM_ROWS;
-        let min_x = NUM_COLS / 2 - 100; //rand::random::<usize>() % max_x;
-        let min_y = NUM_ROWS / 2 - 100; //rand::random::<usize>() % max_y;
-
-        for x in min_x..=max_x {
-            for y in min_y..=max_y {
-                self.cells[x][y].concentration_a = 0.0;
-                self.cells[x][y].concentration_b = 1.0;
-            }
-        }
-    }
 }
 
 impl Drawable for ReactionDiffusion {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
-        for row in self.cells.iter() {
-            for cell in row.iter() {
-                cell.draw(ctx, gl);
-            }
+        for cell in self.cells.iter() {
+            cell.draw(ctx, gl);
         }
     }
 }
 
 impl Updatable for ReactionDiffusion {
     fn update(&mut self, ctx: &UpdateContext) {
-        println!("{:?}", self.last_update.elapsed());
-        self.last_update = Instant::now();
+        //println!("{:?}", self.last_update.elapsed());
 
         if self.drawing {
             let cell_width = ctx.window_width / NUM_COLS as f64;
             let cell_height = ctx.window_height / NUM_ROWS as f64;
             let x = (ctx.mouse_pos[0] / cell_width).round() as usize;
             let y = (ctx.mouse_pos[1] / cell_height).round() as usize;
-            let min_x = (x - MOUSE_BRUSH_SIZE / 2).max(0);
+            let min_x = x.saturating_sub(MOUSE_BRUSH_SIZE / 2);
             let max_x = (x + MOUSE_BRUSH_SIZE / 2).min(NUM_COLS - 1);
-            let min_y = (y - MOUSE_BRUSH_SIZE / 2).max(0);
+            let min_y = y.saturating_sub(MOUSE_BRUSH_SIZE / 2);
             let max_y = (y + MOUSE_BRUSH_SIZE / 2).min(NUM_ROWS - 1);
 
             for x in min_x..=max_x {
                 for y in min_y..=max_y {
-                    self.cells[x][y].concentration_a = 0.0;
-                    self.cells[x][y].concentration_b = 1.0;
+                    self.cells[(x, y)].concentration_a = 0.0;
+                    self.cells[(x, y)].concentration_b = 1.0;
                 }
             }
         }
@@ -246,9 +218,15 @@ impl Updatable for ReactionDiffusion {
 
         for y in 0..NUM_ROWS {
             for x in 0..NUM_COLS {
-                self.cells[x][y].laplace_a = self.laplace_a(x, y);
-                self.cells[x][y].laplace_b = self.laplace_b(x, y);
-                self.cells[x][y].update(ctx);
+                let start = Instant::now();
+                self.cells[(x, y)].laplace_a = self.laplace_a(x, y);
+                println!("laplace a: {:?}", start.elapsed());
+                let start = Instant::now();
+                self.cells[(x, y)].laplace_b = self.laplace_b(x, y);
+                println!("laplace b: {:?}", start.elapsed());
+                let start = Instant::now();
+                self.cells[(x, y)].update(ctx);
+                println!("cell update: {:?}", start.elapsed());
             }
         }
     }
@@ -279,11 +257,7 @@ impl Runnable for ReactionDiffusion {
     }
 
     fn setup(&mut self, ctx: &SetupContext) {
-        for x in 0..NUM_ROWS {
-            for y in 0..NUM_ROWS {
-                self.cells[x].push(Cell::new(x as u64, y as u64));
-            }
-        }
+        self.cells.init(|x, y| Cell::new(x as u64, y as u64));
         self.resize_cells(ctx.window_width, ctx.window_height);
     }
 }

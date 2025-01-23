@@ -1,4 +1,5 @@
 pub mod app;
+pub mod grid;
 pub mod vec2d;
 
 use graphics::{Context, Transformed};
