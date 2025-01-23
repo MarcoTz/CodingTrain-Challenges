@@ -80,6 +80,15 @@ impl<T> Grid<T> {
         }
         new_grid
     }
+
+    pub fn map_mut<F>(&mut self, fun: F)
+    where
+        F: Fn(&mut T),
+    {
+        for t in self.elements.iter_mut() {
+            fun(t)
+        }
+    }
 }
 
 impl Grid<f64> {
