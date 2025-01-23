@@ -25,6 +25,12 @@ const LAPLACE_WEIGHTS: [[f64; 3]; 3] = [[0.05, 0.2, 0.05], [0.2, -1.0, 0.2], [0.
 const MOUSE_BRUSH_SIZE: usize = 10;
 const NUM_UPDATES: usize = 10;
 
+const HELP_TEXT: &str = "Controls:
+h: show help text (stdout)
+spacebar: pause/unpause,
+r ; reset
+";
+
 mod cell;
 use cell::Cell;
 
@@ -122,13 +128,29 @@ impl Updatable for ReactionDiffusion {
 
 impl EventHandler for ReactionDiffusion {
     fn handle_input(&mut self, ctx: &InputContext) {
-        if ctx.args.button == Button::Keyboard(Key::Space) && ctx.args.state == ButtonState::Release
-        {
-            self.running = !self.running;
-        }
-
         if ctx.args.button == Button::Mouse(MouseButton::Left) {
             self.drawing = ctx.args.state == ButtonState::Press;
+            return;
+        }
+
+        if ctx.args.state != ButtonState::Release {
+            return;
+        }
+
+        if let Button::Keyboard(key) = ctx.args.button {
+            match key {
+                Key::Space => self.running = !self.running,
+                Key::H => println!("{}", HELP_TEXT),
+                Key::R => {
+                    self.drawing = false;
+                    self.running = false;
+                    for cell in self.cells.iter_mut() {
+                        cell.concentration_a = 1.0;
+                        cell.concentration_b = 0.0;
+                    }
+                }
+                _ => return,
+            }
         }
     }
     fn handle_resize(&mut self, args: &ResizeArgs) {
