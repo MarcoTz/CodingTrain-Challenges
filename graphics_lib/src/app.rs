@@ -52,6 +52,7 @@ impl<T: Runnable> App<T> {
         let ctx = UpdateContext {
             window_width: size.width,
             window_height: size.height,
+            mouse_pos: self.mouse_pos,
             args,
         };
         self.runnable.update(&ctx)

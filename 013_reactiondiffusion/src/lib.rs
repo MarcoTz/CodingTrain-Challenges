@@ -4,7 +4,11 @@ use graphics_lib::{
     UpdateContext,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, Key, ResizeArgs, Size};
+use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs, Size};
+use std::{
+    thread::sleep,
+    time::{Duration, Instant},
+};
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -22,6 +26,8 @@ const COLOR_A: Color = [0.0, 0.2, 1.0, 1.0];
 const WEIGHT_CENTER: f64 = -1.0;
 const WEIGHT_ADJACENT: f64 = 0.2;
 const WEIGHT_DIAG: f64 = 0.05;
+
+const MOUSE_BRUSH_SIZE: usize = 10;
 
 mod cell;
 use cell::Cell;
@@ -72,7 +78,9 @@ impl Dir {
 
 pub struct ReactionDiffusion {
     running: bool,
+    drawing: bool,
     cells: Vec<Vec<Cell>>,
+    last_update: Instant,
 }
 
 impl ReactionDiffusion {
@@ -82,8 +90,10 @@ impl ReactionDiffusion {
             rows.push(Vec::with_capacity(NUM_ROWS));
         }
         ReactionDiffusion {
+            drawing: false,
             running: false,
             cells: rows,
+            last_update: Instant::now(),
         }
     }
 
@@ -210,9 +220,30 @@ impl Drawable for ReactionDiffusion {
 
 impl Updatable for ReactionDiffusion {
     fn update(&mut self, ctx: &UpdateContext) {
+        println!("{:?}", self.last_update.elapsed());
+        self.last_update = Instant::now();
+
+        if self.drawing {
+            let cell_width = ctx.window_width / NUM_COLS as f64;
+            let cell_height = ctx.window_height / NUM_ROWS as f64;
+            let x = (ctx.mouse_pos[0] / cell_width).round() as usize;
+            let y = (ctx.mouse_pos[1] / cell_height).round() as usize;
+            let min_x = (x - MOUSE_BRUSH_SIZE / 2).max(0);
+            let max_x = (x + MOUSE_BRUSH_SIZE / 2).min(NUM_COLS - 1);
+            let min_y = (y - MOUSE_BRUSH_SIZE / 2).max(0);
+            let max_y = (y + MOUSE_BRUSH_SIZE / 2).min(NUM_ROWS - 1);
+
+            for x in min_x..=max_x {
+                for y in min_y..=max_y {
+                    self.cells[x][y].concentration_a = 0.0;
+                    self.cells[x][y].concentration_b = 1.0;
+                }
+            }
+        }
         if !self.running {
             return;
         }
+
         for y in 0..NUM_ROWS {
             for x in 0..NUM_COLS {
                 self.cells[x][y].laplace_a = self.laplace_a(x, y);
@@ -228,6 +259,10 @@ impl EventHandler for ReactionDiffusion {
         if ctx.args.button == Button::Keyboard(Key::Space) && ctx.args.state == ButtonState::Release
         {
             self.running = !self.running;
+        }
+
+        if ctx.args.button == Button::Mouse(MouseButton::Left) {
+            self.drawing = ctx.args.state == ButtonState::Press;
         }
     }
     fn handle_resize(&mut self, args: &ResizeArgs) {
@@ -250,6 +285,5 @@ impl Runnable for ReactionDiffusion {
             }
         }
         self.resize_cells(ctx.window_width, ctx.window_height);
-        self.seed_b();
     }
 }
