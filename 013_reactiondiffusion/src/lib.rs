@@ -5,24 +5,25 @@ use graphics_lib::{
 };
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs, Size};
-use std::time::Instant;
+//use std::time::Instant;
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
 
-const NUM_ROWS: usize = 500;
-const NUM_COLS: usize = 500;
+const NUM_ROWS: usize = 300;
+const NUM_COLS: usize = 300;
 
 const FEED_RATE: f64 = 0.055;
 const KILL_RATE: f64 = 0.062;
 const DIFFUSION_A: f64 = 1.0;
 const DIFFUSION_B: f64 = 0.5;
-const COLOR_B: Color = [0.8, 0.0, 0.4, 1.0];
-const COLOR_A: Color = [0.0, 0.2, 1.0, 1.0];
+const COLOR_B: Color = [1.0, 1.0, 1.0, 1.0];
+const COLOR_A: Color = [0.0, 0.0, 0.0, 1.0];
 
 const LAPLACE_WEIGHTS: [[f64; 3]; 3] = [[0.05, 0.2, 0.05], [0.2, -1.0, 0.2], [0.05, 0.2, 0.05]];
 
 const MOUSE_BRUSH_SIZE: usize = 10;
+const NUM_UPDATES: usize = 10;
 
 mod cell;
 use cell::Cell;
@@ -59,6 +60,24 @@ impl ReactionDiffusion {
             cell.height = height;
         }
     }
+
+    pub fn mouse_draw(&mut self, window_width: f64, window_height: f64, mouse_pos: [f64; 2]) {
+        let cell_width = window_width / NUM_COLS as f64;
+        let cell_height = window_height / NUM_ROWS as f64;
+        let x = (mouse_pos[0] / cell_width).round() as usize;
+        let y = (mouse_pos[1] / cell_height).round() as usize;
+        let min_x = x.saturating_sub(MOUSE_BRUSH_SIZE / 2);
+        let max_x = (x + MOUSE_BRUSH_SIZE / 2).min(NUM_COLS - 1);
+        let min_y = y.saturating_sub(MOUSE_BRUSH_SIZE / 2);
+        let max_y = (y + MOUSE_BRUSH_SIZE / 2).min(NUM_ROWS - 1);
+
+        for x in min_x..=max_x {
+            for y in min_y..=max_y {
+                self.cells[(x, y)].concentration_a = 0.0;
+                self.cells[(x, y)].concentration_b = 1.0;
+            }
+        }
+    }
 }
 
 impl Drawable for ReactionDiffusion {
@@ -72,42 +91,30 @@ impl Drawable for ReactionDiffusion {
 impl Updatable for ReactionDiffusion {
     fn update(&mut self, ctx: &UpdateContext) {
         if self.drawing {
-            let cell_width = ctx.window_width / NUM_COLS as f64;
-            let cell_height = ctx.window_height / NUM_ROWS as f64;
-            let x = (ctx.mouse_pos[0] / cell_width).round() as usize;
-            let y = (ctx.mouse_pos[1] / cell_height).round() as usize;
-            let min_x = x.saturating_sub(MOUSE_BRUSH_SIZE / 2);
-            let max_x = (x + MOUSE_BRUSH_SIZE / 2).min(NUM_COLS - 1);
-            let min_y = y.saturating_sub(MOUSE_BRUSH_SIZE / 2);
-            let max_y = (y + MOUSE_BRUSH_SIZE / 2).min(NUM_ROWS - 1);
-
-            for x in min_x..=max_x {
-                for y in min_y..=max_y {
-                    self.cells[(x, y)].concentration_a = 0.0;
-                    self.cells[(x, y)].concentration_b = 1.0;
-                }
-            }
+            self.mouse_draw(ctx.window_width, ctx.window_height, ctx.mouse_pos);
         }
         if !self.running {
             return;
         }
 
-        let laplace_a = self
-            .cells
-            .clone()
-            .map(|cell| cell.concentration_a)
-            .convolute(LAPLACE_WEIGHTS);
-        let laplace_b = self
-            .cells
-            .clone()
-            .map(|cell| cell.concentration_b)
-            .convolute(LAPLACE_WEIGHTS);
+        for _ in 0..NUM_UPDATES {
+            let laplace_a = self
+                .cells
+                .clone()
+                .map(|cell| cell.concentration_a)
+                .convolute(LAPLACE_WEIGHTS);
+            let laplace_b = self
+                .cells
+                .clone()
+                .map(|cell| cell.concentration_b)
+                .convolute(LAPLACE_WEIGHTS);
 
-        for y in 0..NUM_ROWS {
-            for x in 0..NUM_COLS {
-                self.cells[(x, y)].laplace_a = laplace_a[(x, y)];
-                self.cells[(x, y)].laplace_b = laplace_b[(x, y)];
-                self.cells[(x, y)].update(ctx);
+            for y in 0..NUM_ROWS {
+                for x in 0..NUM_COLS {
+                    self.cells[(x, y)].laplace_a = laplace_a[(x, y)];
+                    self.cells[(x, y)].laplace_b = laplace_b[(x, y)];
+                    self.cells[(x, y)].update(ctx);
+                }
             }
         }
     }
