@@ -10,7 +10,8 @@ members = [
   "006_mitosis",
   "007_solarsystem",
   "010_mazegenerator",
-  "013_reactiondiffusion"
+  "013_reactiondiffusion",
+  "014_fractaltrees",
 ]
 
 resolver = "2"

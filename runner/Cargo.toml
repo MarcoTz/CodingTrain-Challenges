@@ -14,3 +14,4 @@ mitosis={path="../006_mitosis"}
 solarsystem={path="../007_solarsystem"}
 mazegenerator={path="../010_mazegenerator"}
 reactiondiffusion={path="../013_reactiondiffusion"}
+fractaltrees={path="../014_fractaltrees"}
