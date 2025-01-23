@@ -19,6 +19,15 @@ impl<T> Grid<T> {
         }
     }
 
+    pub fn from_default(num_cols: usize, num_rows: usize) -> Grid<T>
+    where
+        T: Default,
+    {
+        let mut grid = Grid::new(num_cols, num_rows);
+        grid.init(|_, _| T::default());
+        grid
+    }
+
     pub fn init<F: Fn(usize, usize) -> T>(&mut self, fun: F) {
         for y in 0..self.num_rows {
             for x in 0..self.num_cols {
@@ -27,16 +36,31 @@ impl<T> Grid<T> {
         }
     }
 
-    fn ind(&self, x: usize, y: usize) -> usize {
-        y * self.num_cols + x
+    fn ind(&self, x: usize, y: usize) -> Option<usize> {
+        if x >= self.num_cols || y >= self.num_rows {
+            return None;
+        }
+        Some(y * self.num_cols + x)
     }
 
     pub fn get(&self, x: usize, y: usize) -> Option<&T> {
-        self.elements.get(self.ind(x, y))
+        self.elements.get(self.ind(x, y)?)
+    }
+
+    pub fn get_or_default(&self, x: i64, y: i64) -> T
+    where
+        T: Default + Clone,
+    {
+        if x < 0 || y < 0 {
+            return T::default();
+        }
+        self.get(x as usize, y as usize)
+            .cloned()
+            .unwrap_or_default()
     }
 
     pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut T> {
-        let ind = self.ind(x, y);
+        let ind = self.ind(x, y)?;
         self.elements.get_mut(ind)
     }
 
@@ -51,6 +75,29 @@ impl<T> Grid<T> {
     pub fn row(&self, y: usize) -> &[T] {
         let start_ind = self.num_cols * y;
         &self.elements[start_ind..start_ind + self.num_cols]
+    }
+}
+
+impl Grid<f64> {
+    pub fn convolute<const N: usize, const M: usize>(&self, kernel: [[f64; N]; M]) -> Grid<f64> {
+        assert!(N % 2 == 1);
+        assert!(M % 2 == 1);
+        let mut new_grid = Grid::from_default(self.num_cols, self.num_rows);
+        for center_y in 0..self.num_rows {
+            for center_x in 0..self.num_cols {
+                let start_x = center_x as i64 - (N as i64 - 1) / 2;
+                let start_y = center_y as i64 - (M as i64 - 1) / 2;
+                for kernel_y in 0..M {
+                    let y = start_y + kernel_y as i64;
+                    for kernel_x in 0..N {
+                        let x = start_x + kernel_x as i64;
+                        new_grid[(center_x, center_y)] +=
+                            kernel[kernel_x][kernel_y] * self.get_or_default(x, y);
+                    }
+                }
+            }
+        }
+        new_grid
     }
 }
 
@@ -143,17 +190,21 @@ mod grid_tests {
     fn grid_index() {
         let mut grid = Grid::new(5, 5);
         grid.init(|x, y| (x, y));
-        let result = grid[1][1];
+        let result = grid[(1, 1)];
         let expected = (1, 1);
         assert_eq!(result, expected)
     }
 
     #[test]
-    fn grid_index_tuple() {
-        let mut grid = Grid::new(5, 5);
-        grid.init(|x, y| (x, y));
-        let result = &grid[4];
-        let expected = &[(0, 4), (1, 4), (2, 4), (3, 4), (4, 4)];
+    fn convolution() {
+        let mut grid = Grid::new(3, 3);
+        grid.init(|_, _| 1.0);
+        let result = grid.convolute([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]);
+        let expected = Grid {
+            num_rows: 3,
+            num_cols: 3,
+            elements: vec![4.0, 6.0, 4.0, 6.0, 9.0, 6.0, 4.0, 6.0, 4.0],
+        };
         assert_eq!(result, expected)
     }
 }
