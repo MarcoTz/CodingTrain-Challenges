@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(lsystem::LSystem::new()).run();
+        return App::new(lsystem::SystemRunner::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -33,7 +33,7 @@ fn run_app(args: &mut env::Args) {
         12 => panic!("Lorentz attractor is not implemented"),
         13 => App::new(reactiondiffusion::ReactionDiffusion::new()).run(),
         14 | 15 => App::new(fractaltrees::FractalTree::new()).run(),
-        16 => App::new(lsystem::LSystem::new()).run(),
+        16 => App::new(lsystem::SystemRunner::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

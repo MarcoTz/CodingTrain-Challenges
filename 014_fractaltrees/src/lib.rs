@@ -14,7 +14,7 @@ const START_LEN: f64 = 300.0;
 const NUM_SPLIT: usize = 3;
 const SHORTEN: f64 = 0.5;
 const ANGLE_OFFSET: f64 = -PI / 2.0;
-const ANGLE_DIFF: f64 = PI / 3.0;
+const ANGLE_DIFF: f64 = PI / (NUM_SPLIT as f64);
 
 #[derive(Debug)]
 pub struct FractalTree {
@@ -54,7 +54,7 @@ impl FractalTree {
             tree.bottom = self.end();
             tree.angle = next_angle;
             self.next.push(tree);
-            next_angle += ANGLE_DIFF;
+            next_angle += 2.0 * ANGLE_DIFF;
         }
     }
 }
