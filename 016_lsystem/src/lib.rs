@@ -21,7 +21,7 @@ use turtle::{Turtle, TurtleInstructor};
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
 
-type Alphabet = plant::Plant;
+type Alphabet = koch::Koch;
 
 pub struct SystemRunner<T: Symbol + TurtleInstructor> {
     system: LSystem<T>,
@@ -35,6 +35,8 @@ impl SystemRunner<Alphabet> {
         SystemRunner {
             turtle: Turtle {
                 commands: system.axiom.clone(),
+
+                global_scale: 1.0,
             },
             system,
             paused: true,
@@ -60,9 +62,21 @@ impl<T: Symbol + TurtleInstructor> Updatable for SystemRunner<T> {
 
 impl<T: Symbol + TurtleInstructor> EventHandler for SystemRunner<T> {
     fn handle_input(&mut self, ctx: &InputContext) {
-        if ctx.args.state == ButtonState::Release && ctx.args.button == Button::Keyboard(Key::Space)
-        {
+        if ctx.args.state != ButtonState::Release {
+            return;
+        }
+        if ctx.args.button == Button::Keyboard(Key::Space) {
             self.paused = false
+        }
+
+        if ctx.args.button == Button::Keyboard(Key::Plus)
+            || ctx.args.button == Button::Keyboard(Key::Equals)
+        {
+            self.turtle.global_scale += 0.1;
+        }
+
+        if ctx.args.button == Button::Keyboard(Key::Minus) {
+            self.turtle.global_scale -= 0.1;
         }
     }
 }

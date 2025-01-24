@@ -3,6 +3,7 @@ use graphics_lib::{Drawable, DrawingContext};
 use opengl_graphics::GlGraphics;
 pub struct Turtle<T: TurtleInstructor> {
     pub commands: Vec<T>,
+    pub global_scale: f64,
 }
 
 #[derive(Clone)]
@@ -75,6 +76,7 @@ pub trait TurtleInstructor: Sized {
 impl<T: TurtleInstructor> Drawable for Turtle<T> {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let mut state = T::start(ctx, &self.commands);
+        state.len *= self.global_scale;
         for cmd in self.commands.iter() {
             cmd.command().run(&mut state, gl);
         }
