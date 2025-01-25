@@ -23,9 +23,10 @@ const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
 
 pub struct SystemRunner {
-    current_system: System,
+    current_system: usize,
     turtle: Turtle,
     paused: bool,
+    systems: Vec<System>,
 }
 
 impl SystemRunner {
@@ -33,8 +34,9 @@ impl SystemRunner {
         let system = System::default();
         SystemRunner {
             turtle: Turtle::new(system.axiom()),
-            current_system: system,
+            current_system: 0,
             paused: true,
+            systems: System::all(),
         }
     }
 }
@@ -50,7 +52,9 @@ impl Updatable for SystemRunner {
         if self.paused {
             return;
         }
-        self.turtle.commands = self.current_system.next_iter();
+        self.systems[self.current_system].next_iter();
+        self.turtle.commands = self.systems[self.current_system].commands();
+        self.turtle.iteration += 1;
         self.paused = true;
     }
 }
@@ -72,6 +76,15 @@ impl EventHandler for SystemRunner {
 
         if ctx.args.button == Button::Keyboard(Key::Minus) {
             self.turtle.global_scale -= 0.1;
+        }
+
+        if ctx.args.button == Button::Keyboard(Key::N) {
+            self.current_system += 1;
+            self.current_system = self.current_system % self.systems.len();
+            self.systems[self.current_system].reset();
+            self.turtle.iteration = 0;
+            self.turtle.commands = self.systems[self.current_system].commands();
+            println!("current system {}", self.systems[self.current_system]);
         }
     }
 }

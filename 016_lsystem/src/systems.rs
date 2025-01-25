@@ -4,6 +4,7 @@ use super::{
     turtle::TurtleInstructor,
 };
 use graphics_lib::{Updatable, UpdateContext};
+use std::fmt;
 
 pub enum System {
     Algae(Vec<Algae>, LSystem<Algae>),
@@ -17,42 +18,25 @@ pub enum System {
 }
 
 impl System {
-    pub fn next(self) -> Self {
-        match self {
-            System::Algae(_, _) => {
-                let system = BinTree::l_system();
-                System::BinTree(system.axiom.clone(), system)
-            }
-            System::BinTree(_, _) => {
-                let system = Cantor::l_system();
-                System::Cantor(system.axiom.clone(), system)
-            }
-            System::Cantor(_, _) => {
-                let system = Dragon::l_system();
-                System::Dragon(system.axiom.clone(), system)
-            }
-
-            System::Dragon(_, _) => {
-                let system = Koch::l_system();
-                System::Koch(system.axiom.clone(), system)
-            }
-            System::Koch(_, _) => {
-                let system = Plant::l_system();
-                System::Plant(system.axiom.clone(), system)
-            }
-            System::Plant(_, _) => {
-                let system = Sierpinski::l_system();
-                System::Sierpinski(system.axiom.clone(), system)
-            }
-            System::Sierpinski(_, _) => {
-                let system = SierpinskiCurve::l_system();
-                System::SierpinskiCurve(system.axiom.clone(), system)
-            }
-            System::SierpinskiCurve(_, _) => {
-                let system = Algae::l_system();
-                System::Algae(system.axiom.clone(), system)
-            }
-        }
+    pub fn all() -> Vec<System> {
+        let mut systems = vec![];
+        let system = BinTree::l_system();
+        systems.push(System::BinTree(system.axiom.clone(), system));
+        let system = Cantor::l_system();
+        systems.push(System::Cantor(system.axiom.clone(), system));
+        let system = Dragon::l_system();
+        systems.push(System::Dragon(system.axiom.clone(), system));
+        let system = Koch::l_system();
+        systems.push(System::Koch(system.axiom.clone(), system));
+        let system = Plant::l_system();
+        systems.push(System::Plant(system.axiom.clone(), system));
+        let system = Sierpinski::l_system();
+        systems.push(System::Sierpinski(system.axiom.clone(), system));
+        let system = SierpinskiCurve::l_system();
+        systems.push(System::SierpinskiCurve(system.axiom.clone(), system));
+        let system = Algae::l_system();
+        systems.push(System::Algae(system.axiom.clone(), system));
+        systems
     }
 
     pub fn axiom(&self) -> Vec<Box<dyn TurtleInstructor>> {
@@ -113,64 +97,90 @@ impl System {
         }
     }
 
-    pub fn next_iter(&mut self) -> Vec<Box<dyn TurtleInstructor>> {
+    pub fn reset(&mut self) {
+        match self {
+            System::Algae(st, sys) => *st = sys.axiom.clone(),
+            System::BinTree(st, sys) => *st = sys.axiom.clone(),
+            System::Cantor(st, sys) => *st = sys.axiom.clone(),
+            System::Dragon(st, sys) => *st = sys.axiom.clone(),
+            System::Koch(st, sys) => *st = sys.axiom.clone(),
+            System::Plant(st, sys) => *st = sys.axiom.clone(),
+            System::Sierpinski(st, sys) => *st = sys.axiom.clone(),
+            System::SierpinskiCurve(st, sys) => *st = sys.axiom.clone(),
+        }
+    }
+
+    pub fn next_iter(&mut self) {
         match self {
             System::Algae(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::BinTree(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::Cantor(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::Dragon(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::Koch(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::Plant(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::Sierpinski(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
             System::SierpinskiCurve(st, sys) => {
                 *st = sys.next(st);
-                st.clone()
-                    .into_iter()
-                    .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
-                    .collect()
             }
+        }
+    }
+
+    pub fn commands(&self) -> Vec<Box<dyn TurtleInstructor>> {
+        match self {
+            System::Algae(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::BinTree(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::Cantor(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::Dragon(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::Koch(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::Plant(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::Sierpinski(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
+            System::SierpinskiCurve(st, _) => st
+                .clone()
+                .into_iter()
+                .map(|a| Box::new(a) as Box<dyn TurtleInstructor>)
+                .collect(),
         }
     }
 }
@@ -193,6 +203,21 @@ impl Updatable for System {
             System::Plant(st, sys) => *st = sys.next(st),
             System::Sierpinski(st, sys) => *st = sys.next(st),
             System::SierpinskiCurve(st, sys) => *st = sys.next(st),
+        }
+    }
+}
+
+impl fmt::Display for System {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            System::Algae(_, _) => f.write_str("Algae"),
+            System::BinTree(_, _) => f.write_str("BinTree"),
+            System::Cantor(_, _) => f.write_str("Cantor"),
+            System::Dragon(_, _) => f.write_str("Dragon"),
+            System::Koch(_, _) => f.write_str("Koch"),
+            System::Plant(_, _) => f.write_str("Plant"),
+            System::Sierpinski(_, _) => f.write_str("Sierpinski"),
+            System::SierpinskiCurve(_, _) => f.write_str("SierpinskiCurve"),
         }
     }
 }

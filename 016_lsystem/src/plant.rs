@@ -61,7 +61,7 @@ impl TurtleInstructor for Plant {
             [1.0, 1.0, 1.0, 1.0],
             2.0,
         );
-        st.len = 10.0 * ctx.args.window_size[1] / (iter as f64);
+        st.len = ctx.args.window_size[1] / (2_f64.powi(iter as i32 + 2));
         st
     }
 
