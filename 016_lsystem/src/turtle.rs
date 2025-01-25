@@ -1,9 +1,20 @@
 use graphics::{line, types::Color, Transformed};
 use graphics_lib::{Drawable, DrawingContext};
 use opengl_graphics::GlGraphics;
-pub struct Turtle<T: TurtleInstructor> {
-    pub commands: Vec<T>,
+pub struct Turtle {
+    pub commands: Vec<Box<dyn TurtleInstructor>>,
     pub global_scale: f64,
+    pub iteration: u64,
+}
+
+impl Turtle {
+    pub fn new(cmds: Vec<Box<dyn TurtleInstructor>>) -> Turtle {
+        Turtle {
+            commands: cmds,
+            global_scale: 1.0,
+            iteration: 0,
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -68,14 +79,14 @@ impl TurtleCommand {
     }
 }
 
-pub trait TurtleInstructor: Sized {
-    fn start(ctx: &DrawingContext, cmds: &[Self]) -> TurtleState;
+pub trait TurtleInstructor {
+    fn start(&self, ctx: &DrawingContext, num_commands: u64) -> TurtleState;
     fn command(&self) -> TurtleCommand;
 }
 
-impl<T: TurtleInstructor> Drawable for Turtle<T> {
+impl Drawable for Turtle {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
-        let mut state = T::start(ctx, &self.commands);
+        let mut state = self.commands.first().unwrap().start(ctx, self.iteration);
         state.len *= self.global_scale;
         for cmd in self.commands.iter() {
             cmd.command().run(&mut state, gl);

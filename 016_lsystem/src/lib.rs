@@ -14,53 +14,48 @@ mod sierpinski;
 mod sierpinski_curve;
 
 mod l_system;
+mod systems;
 mod turtle;
-use l_system::{LSystem, Symbol};
-use turtle::{Turtle, TurtleInstructor};
+use systems::System;
+use turtle::Turtle;
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
 
-type Alphabet = koch::Koch;
-
-pub struct SystemRunner<T: Symbol + TurtleInstructor> {
-    system: LSystem<T>,
-    turtle: Turtle<T>,
+pub struct SystemRunner {
+    current_system: System,
+    turtle: Turtle,
     paused: bool,
 }
 
-impl SystemRunner<Alphabet> {
-    pub fn new() -> SystemRunner<Alphabet> {
-        let system = Alphabet::l_system();
+impl SystemRunner {
+    pub fn new() -> SystemRunner {
+        let system = System::default();
         SystemRunner {
-            turtle: Turtle {
-                commands: system.axiom.clone(),
-
-                global_scale: 1.0,
-            },
-            system,
+            turtle: Turtle::new(system.axiom()),
+            current_system: system,
             paused: true,
         }
     }
 }
 
-impl<T: Symbol + TurtleInstructor> Drawable for SystemRunner<T> {
+impl Drawable for SystemRunner {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         self.turtle.draw(ctx, gl)
     }
 }
 
-impl<T: Symbol + TurtleInstructor> Updatable for SystemRunner<T> {
+impl Updatable for SystemRunner {
     fn update(&mut self, _: &UpdateContext) {
         if self.paused {
             return;
         }
-        self.turtle.commands = self.system.next(&self.turtle.commands);
+        self.turtle.commands = self.current_system.next_iter();
         self.paused = true;
     }
 }
 
-impl<T: Symbol + TurtleInstructor> EventHandler for SystemRunner<T> {
+impl EventHandler for SystemRunner {
     fn handle_input(&mut self, ctx: &InputContext) {
         if ctx.args.state != ButtonState::Release {
             return;
@@ -81,7 +76,7 @@ impl<T: Symbol + TurtleInstructor> EventHandler for SystemRunner<T> {
     }
 }
 
-impl<T: Symbol + TurtleInstructor> Runnable for SystemRunner<T> {
+impl Runnable for SystemRunner {
     fn window_size(&self) -> Size {
         Size {
             width: WIDTH,

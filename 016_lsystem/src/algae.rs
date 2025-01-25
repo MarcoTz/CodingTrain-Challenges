@@ -27,7 +27,7 @@ impl Algae {
 impl Symbol for Algae {}
 
 impl TurtleInstructor for Algae {
-    fn start(ctx: &DrawingContext, _: &[Self]) -> TurtleState {
+    fn start(&self, ctx: &DrawingContext, _iter: u64) -> TurtleState {
         TurtleState::new(
             ctx.id_trans().trans(
                 2.0 * ctx.args.window_size[0] / 3.0,

@@ -38,13 +38,13 @@ impl Koch {
 }
 
 impl TurtleInstructor for Koch {
-    fn start(ctx: &DrawingContext, cmds: &[Self]) -> TurtleState {
+    fn start(&self, ctx: &DrawingContext, iter: u64) -> TurtleState {
         let mut st = TurtleState::new(
             ctx.id_trans().trans(ctx.args.window_size[0] / 2.0, 0.0),
             [1.0, 1.0, 1.0, 1.0],
             2.0,
         );
-        st.len = 10.0 * ctx.args.window_size[1].min(ctx.args.window_size[1]) / (cmds.len() as f64);
+        st.len = 10.0 * ctx.args.window_size[1].min(ctx.args.window_size[1]) / (iter as f64);
         st
     }
 

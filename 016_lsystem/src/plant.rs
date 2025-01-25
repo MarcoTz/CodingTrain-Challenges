@@ -53,7 +53,7 @@ impl Plant {
 }
 
 impl TurtleInstructor for Plant {
-    fn start(ctx: &DrawingContext, cmds: &[Self]) -> TurtleState {
+    fn start(&self, ctx: &DrawingContext, iter: u64) -> TurtleState {
         let mut st = TurtleState::new(
             ctx.id_trans()
                 .trans(ctx.args.window_size[0] / 2.0, ctx.args.window_size[1])
@@ -61,12 +61,7 @@ impl TurtleInstructor for Plant {
             [1.0, 1.0, 1.0, 1.0],
             2.0,
         );
-        st.len = 10.0 * ctx.args.window_size[1]
-            / (cmds
-                .iter()
-                .filter(|pl| matches!(pl, Plant::F))
-                .collect::<Vec<&Self>>()
-                .len() as f64);
+        st.len = 10.0 * ctx.args.window_size[1] / (iter as f64);
         st
     }
 
