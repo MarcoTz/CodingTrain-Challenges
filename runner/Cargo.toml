@@ -16,3 +16,4 @@ mazegenerator={path="../010_mazegenerator"}
 reactiondiffusion={path="../013_reactiondiffusion"}
 fractaltrees={path="../014_fractaltrees"}
 lsystem={path="../016_lsystem"}
+spacecolonization={path="../017_spacecolonization"}

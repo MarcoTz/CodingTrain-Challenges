@@ -12,7 +12,8 @@ members = [
   "010_mazegenerator",
   "013_reactiondiffusion",
   "014_fractaltrees",
-  "016_lsystem"
+  "016_lsystem",
+  "017_spacecolonization"
 ]
 
 resolver = "2"
