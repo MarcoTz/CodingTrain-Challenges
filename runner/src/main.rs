@@ -35,6 +35,7 @@ fn run_app(args: &mut env::Args) {
         14 | 15 => App::new(fractaltrees::FractalTree::new()).run(),
         16 => App::new(lsystem::SystemRunner::new()).run(),
         17 => App::new(spacecolonization::SpaceColonization::new()).run(),
+        18 => panic!("3D fractal trees are not implemented"),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

@@ -13,7 +13,8 @@ members = [
   "013_reactiondiffusion",
   "014_fractaltrees",
   "016_lsystem",
-  "017_spacecolonization"
+  "017_spacecolonization",
+  "019_supershape"
 ]
 
 resolver = "2"
