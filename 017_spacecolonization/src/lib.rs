@@ -1,33 +1,42 @@
-use graphics::{ellipse, line};
+use graphics::{ellipse, line, types::Color};
 use graphics_lib::{
-    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, SetupContext,
-    Updatable, UpdateContext,
+    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable,
+    SetupContext, Updatable, UpdateContext,
 };
 use opengl_graphics::GlGraphics;
-use piston::{ResizeArgs, Size};
-use std::time::Instant;
+use piston::{Button, ButtonState, Key, ResizeArgs, Size};
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
 
-const NUM_POINTS: usize = 200;
+const NUM_POINTS: usize = 1000;
 const DIST_NEXT: f64 = 50.0;
-const INF_RADIUS: f64 = 18.0 * DIST_NEXT;
+const INF_RADIUS: f64 = 15.0 * DIST_NEXT;
 const KILL_DIST: f64 = 20.0;
 
-const MAX_THICK: f64 = 10.0;
+const MAX_THICK: f64 = 3.0;
 const MIN_THICK: f64 = 1.0;
+const NODE_COLOR: Color = [1.0, 0.5, 0.2, 1.0];
+const ENVELOPE_RADIUS: f64 = 400.0;
+
+const MAX_LEAVES: usize = 20;
+const LEAF_SIZE: f64 = 5.0;
+const LEAF_RATE: f64 = 0.5;
 
 struct TreeNode {
     pos: Vec2D,
-    next: Option<Vec2D>,
+    next: Vec<Vec2D>,
+    finished: bool,
+    leaves: Vec<(Vec2D, f64)>,
 }
 
 impl TreeNode {
     pub fn new(x: f64, y: f64) -> TreeNode {
         TreeNode {
             pos: Vec2D::new(x, y),
-            next: None,
+            next: vec![],
+            finished: false,
+            leaves: vec![],
         }
     }
 
@@ -40,6 +49,18 @@ impl TreeNode {
         }
         dist.set_abs(1.0);
         dist
+    }
+
+    fn generate_leaves(&mut self, last: Vec2D) {
+        for _ in 0..MAX_LEAVES {
+            if rand::random::<f64>() < LEAF_RATE {
+                continue;
+            }
+            let dist = rand::random::<f64>();
+            let leaf_pt = ((1.0 - dist) * self.pos) + (dist * last);
+            let leaf_size = rand::random::<f64>() * LEAF_SIZE;
+            self.leaves.push((leaf_pt, leaf_size));
+        }
     }
 }
 
@@ -69,12 +90,18 @@ impl SpaceColonization {
 
     fn generate_attraction(&mut self, window_width: f64, window_height: f64) {
         self.attraction_points.clear();
+        let envelope_center = Vec2D {
+            x: window_width / 2.0,
+            y: window_height / 3.0,
+        };
         for _ in 0..NUM_POINTS {
             let mut new_point = Vec2D {
                 x: rand::random::<f64>() * window_width,
-                y: rand_between(0.0, 2.0 * window_height / 3.0),
+                y: rand::random::<f64>() * window_height,
             };
-            while self.attraction_points.contains(&new_point) {
+            while new_point.dist(&envelope_center) > ENVELOPE_RADIUS
+                || self.attraction_points.contains(&new_point)
+            {
                 new_point = Vec2D {
                     x: rand::random::<f64>() * window_width,
                     y: rand_between(0.0, 2.0 * window_height / 3.0),
@@ -88,18 +115,8 @@ impl SpaceColonization {
 
 impl Drawable for SpaceColonization {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
-        let transform = ctx.id_trans();
-
         for node in self.nodes.iter() {
             node.draw(ctx, gl);
-        }
-        for pt in self.attraction_points.iter() {
-            ellipse(
-                [1.0, 0.0, 0.0, 0.3],
-                [pt.x - 2.0, pt.y - 2.0, 4.0, 4.0],
-                transform,
-                gl,
-            );
         }
     }
 }
@@ -107,28 +124,44 @@ impl Drawable for SpaceColonization {
 impl Drawable for TreeNode {
     fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
         let transform = ctx.id_trans();
-        if let Some(pt) = self.next {
+        for next in self.next.iter() {
             let thickness =
                 (MAX_THICK - MIN_THICK) * (self.pos.y / ctx.args.window_size[1]) + MIN_THICK;
             line(
-                [1.0, 0.0, 1.0, 1.0],
+                NODE_COLOR,
                 thickness,
-                [self.pos.x, self.pos.y, pt.x, pt.y],
+                [self.pos.x, self.pos.y, next.x, next.y],
+                transform,
+                gl,
+            );
+            for leaf in self.leaves.iter() {
+                ellipse(
+                    [0.0, 1.0, 0.0, 1.0],
+                    [
+                        leaf.0.x - leaf.1,
+                        leaf.0.y - leaf.1,
+                        leaf.1 * 2.0,
+                        leaf.1 * 2.0,
+                    ],
+                    transform,
+                    gl,
+                );
+            }
+        }
+
+        if self.next.is_empty() {
+            ellipse(
+                [1.0, 0.0, 0.8, 1.0],
+                [self.pos.x - 8.0, self.pos.y - 8.0, 16.0, 16.0],
                 transform,
                 gl,
             );
         }
-        ellipse(
-            [1.0, 1.0, 0.0, 1.0],
-            [self.pos.x - 1.0, self.pos.y - 1.0, 2.0, 2.0],
-            transform,
-            gl,
-        );
     }
 }
 
 impl Updatable for SpaceColonization {
-    fn update(&mut self, _: &UpdateContext) {
+    fn update(&mut self, ctx: &UpdateContext) {
         struct Indices {
             point_index: usize,
             node_index: usize,
@@ -149,19 +182,35 @@ impl Updatable for SpaceColonization {
         }
 
         let mut new_nodes = vec![];
-        for (ind, node) in self.nodes.iter().enumerate() {
+        let existing_pos: Vec<Vec2D> = self.nodes.iter().map(|node| node.pos).collect();
+
+        for (ind, node) in self.nodes.iter_mut().enumerate() {
+            if node.finished {
+                continue;
+            }
             let closest: Vec<&Vec2D> = indices
                 .iter()
                 .filter(|inds| inds.node_index == ind)
                 .map(|ind| &self.attraction_points[ind.point_index])
                 .collect();
             if closest.is_empty() {
+                node.finished = true;
                 continue;
             }
             let n = node.avg_distance(&closest);
             let new_pos = node.pos + DIST_NEXT * n;
-            let mut new_node = TreeNode::new(new_pos.x, new_pos.y);
-            new_node.next = Some(node.pos);
+            if existing_pos.contains(&new_pos) {
+                continue;
+            }
+            let new_node = TreeNode::new(new_pos.x, new_pos.y);
+            node.next.push(new_pos);
+            if new_pos.dist(&Vec2D {
+                x: ctx.window_width / 2.0,
+                y: ctx.window_height / 2.0,
+            }) < INF_RADIUS
+            {
+                node.generate_leaves(new_pos);
+            }
             new_nodes.push(new_node);
         }
 
@@ -177,6 +226,18 @@ impl Updatable for SpaceColonization {
 impl EventHandler for SpaceColonization {
     fn handle_resize(&mut self, ctx: &ResizeArgs) {
         self.generate_attraction(ctx.window_size[0], ctx.window_size[1]);
+    }
+
+    fn handle_input(&mut self, ctx: &InputContext) {
+        if ctx.args.state == ButtonState::Release && ctx.args.button == Button::Keyboard(Key::Space)
+        {
+            self.nodes.clear();
+            self.generate_attraction(ctx.window_width, ctx.window_height);
+            self.nodes.push(TreeNode::new(
+                ctx.window_width / 2.0,
+                ctx.window_height - 2.0,
+            ))
+        }
     }
 }
 
