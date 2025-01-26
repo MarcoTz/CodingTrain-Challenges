@@ -1,10 +1,10 @@
 use graphics::{ellipse, line, types::Color};
 use graphics_lib::{
     rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable,
-    SetupContext, Updatable, UpdateContext,
+    SetupContext, Updatable, UpdateContext, WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, Key, ResizeArgs, Size};
+use piston::{Button, ButtonState, Key, ResizeArgs};
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -242,10 +242,11 @@ impl EventHandler for SpaceColonization {
 }
 
 impl Runnable for SpaceColonization {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Space Colonization".to_owned(),
         }
     }
 

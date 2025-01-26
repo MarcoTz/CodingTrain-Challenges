@@ -1,9 +1,9 @@
 use graphics::{line, types::Color};
 use graphics_lib::{
     vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, Updatable, UpdateContext,
+    WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use window::Size;
 
 const WIDTH: f64 = 600.0;
 const HEIGHT: f64 = 600.0;
@@ -95,10 +95,11 @@ impl Drawable for RainCloud {
 impl EventHandler for RainCloud {}
 
 impl Runnable for RainCloud {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Purple Rain".to_owned(),
         }
     }
 }

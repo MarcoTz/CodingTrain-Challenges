@@ -1,8 +1,9 @@
 use graphics_lib::{
     Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
+    WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, Key, Size};
+use piston::{Button, ButtonState, Key};
 
 mod algae;
 mod bin_tree;
@@ -90,10 +91,11 @@ impl EventHandler for SystemRunner {
 }
 
 impl Runnable for SystemRunner {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "L-System".to_owned(),
         }
     }
 }

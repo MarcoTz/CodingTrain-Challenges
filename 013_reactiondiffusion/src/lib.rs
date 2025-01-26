@@ -1,10 +1,10 @@
 use graphics::types::Color;
 use graphics_lib::{
     grid::Grid, Drawable, DrawingContext, EventHandler, InputContext, Runnable, SetupContext,
-    Updatable, UpdateContext,
+    Updatable, UpdateContext, WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs, Size};
+use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs};
 //use std::time::Instant;
 
 const WIDTH: f64 = 800.0;
@@ -159,10 +159,11 @@ impl EventHandler for ReactionDiffusion {
 }
 
 impl Runnable for ReactionDiffusion {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Reaction Diffusion".to_owned(),
         }
     }
 

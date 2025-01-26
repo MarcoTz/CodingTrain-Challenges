@@ -1,8 +1,9 @@
 use graphics::rectangle;
-use graphics_lib::{Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable};
+use graphics_lib::{
+    Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, WindowConfig,
+};
 use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key};
-use window::Size;
 
 const WINDOW_WIDTH: f64 = 1000.0;
 const WINDOW_HEIGHT: f64 = 1000.0;
@@ -83,10 +84,11 @@ impl EventHandler for Menger {
 impl Updatable for Menger {}
 
 impl Runnable for Menger {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WINDOW_WIDTH,
             height: WINDOW_HEIGHT,
+            title: "Menger Sponge".to_owned(),
         }
     }
 }

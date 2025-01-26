@@ -1,10 +1,10 @@
 use graphics::ellipse;
 use graphics_lib::{
     rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable,
-    SetupContext, Updatable, UpdateContext,
+    SetupContext, Updatable, UpdateContext, WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, MouseButton, ResizeArgs, Size};
+use piston::{Button, ButtonState, MouseButton, ResizeArgs};
 use std::iter;
 
 mod body;
@@ -144,10 +144,11 @@ impl EventHandler for SolarSystem {
 }
 
 impl Runnable for SolarSystem {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Solar System".to_owned(),
         }
     }
 

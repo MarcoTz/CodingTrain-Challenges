@@ -2,10 +2,9 @@ use core::array;
 use graphics::ellipse;
 use graphics_lib::{
     vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable,
-    UpdateContext,
+    UpdateContext, WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use window::Size;
 
 const NUM_ROWS: usize = 5;
 const NUM_COLS: usize = 12;
@@ -110,10 +109,11 @@ impl EventHandler for SpaceInvaders {
 }
 
 impl Runnable for SpaceInvaders {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Space Invaders".to_owned(),
         }
     }
 }

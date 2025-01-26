@@ -1,3 +1,7 @@
+use std::process::{Command, ExitStatus};
+
+const SCREENSHOT_DIR: &str = "./screnshots";
+
 pub mod app;
 mod drawable;
 mod eventhandler;
@@ -9,8 +13,6 @@ pub use drawable::{Drawable, DrawingContext};
 pub use eventhandler::{EventHandler, InputContext};
 pub use updatable::{Updatable, UpdateContext};
 
-use window::Size;
-
 pub fn rand_between(min: f64, max: f64) -> f64 {
     min + rand::random::<f64>() * (max - min)
 }
@@ -20,7 +22,21 @@ pub struct SetupContext {
     pub window_width: f64,
 }
 
+pub struct WindowConfig {
+    pub width: f64,
+    pub height: f64,
+    pub title: String,
+}
+
 pub trait Runnable: Drawable + Updatable + EventHandler {
-    fn window_size(&self) -> Size;
+    fn config(&self) -> WindowConfig;
     fn setup(&mut self, _: &SetupContext) {}
+    fn screnshot(&self) -> Result<ExitStatus, std::io::Error> {
+        let title = self.config().title;
+        Command::new("scrot")
+            .arg("--focused")
+            .arg("-F")
+            .arg(format!("{SCREENSHOT_DIR}/{title}.png"))
+            .status()
+    }
 }

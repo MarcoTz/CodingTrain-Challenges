@@ -1,9 +1,9 @@
 use graphics::{rectangle, types::Color};
 use graphics_lib::{
     vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, Updatable, UpdateContext,
+    WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::Size;
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -75,10 +75,11 @@ impl Updatable for SuperShape {
 impl EventHandler for SuperShape {}
 
 impl Runnable for SuperShape {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Supershape".to_owned(),
         }
     }
 }

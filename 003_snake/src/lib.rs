@@ -1,9 +1,9 @@
 use graphics::{clear, rectangle};
 use graphics_lib::{
     Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
+    WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use window::Size;
 
 mod food;
 mod snake;
@@ -82,10 +82,11 @@ impl EventHandler for SnakeGame {
 }
 
 impl Runnable for SnakeGame {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Snake".to_owned(),
         }
     }
 }

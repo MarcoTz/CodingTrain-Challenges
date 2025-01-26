@@ -1,10 +1,10 @@
 use graphics::{ellipse, types::Color};
 use graphics_lib::{
     vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable,
-    UpdateContext,
+    UpdateContext, WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, MouseButton, Size};
+use piston::{Button, ButtonState, MouseButton};
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -142,10 +142,11 @@ impl EventHandler for Mitosis {
 }
 
 impl Runnable for Mitosis {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Mitosis".to_owned(),
         }
     }
 }

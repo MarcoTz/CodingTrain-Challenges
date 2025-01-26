@@ -1,10 +1,10 @@
 use graphics::{circle_arc, line};
 use graphics_lib::{
     vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, Updatable, UpdateContext,
+    WindowConfig,
 };
 use opengl_graphics::GlGraphics;
 use std::f64::consts::PI;
-use window::Size;
 
 const WINDOW_HEIGHT: f64 = 600.0;
 const WINDOW_WIDTH: f64 = 600.0;
@@ -123,10 +123,11 @@ impl Updatable for StarSpawner {
 impl EventHandler for StarSpawner {}
 
 impl Runnable for StarSpawner {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WINDOW_WIDTH,
             height: WINDOW_HEIGHT,
+            title: "Starfield".to_owned(),
         }
     }
 }

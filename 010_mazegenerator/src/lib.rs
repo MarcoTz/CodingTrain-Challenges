@@ -1,8 +1,9 @@
 use graphics_lib::{
     Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
+    WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::{Button, ButtonState, Key, Size};
+use piston::{Button, ButtonState, Key};
 
 mod hexagon_maze;
 mod maze;
@@ -58,10 +59,11 @@ impl EventHandler for MazeGenerator {
 }
 
 impl Runnable for MazeGenerator {
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Maze Generator".to_owned(),
         }
     }
 }

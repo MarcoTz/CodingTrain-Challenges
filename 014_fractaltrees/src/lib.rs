@@ -1,10 +1,9 @@
 use graphics::{line, Transformed};
 use graphics_lib::{
     vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, SetupContext, Updatable,
-    UpdateContext,
+    UpdateContext, WindowConfig,
 };
 use opengl_graphics::GlGraphics;
-use piston::Size;
 use std::f64::consts::PI;
 
 const WIDTH: f64 = 800.0;
@@ -98,10 +97,11 @@ impl Runnable for FractalTree {
     fn setup(&mut self, ctx: &SetupContext) {
         self.bottom = Vec2D::new(ctx.window_width / 2.0, ctx.window_height);
     }
-    fn window_size(&self) -> Size {
-        Size {
+    fn config(&self) -> WindowConfig {
+        WindowConfig {
             width: WIDTH,
             height: HEIGHT,
+            title: "Fractal Trees".to_owned(),
         }
     }
 }

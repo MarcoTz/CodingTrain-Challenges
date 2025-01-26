@@ -20,14 +20,13 @@ pub struct App<T: Runnable> {
 
 impl<T: Runnable> App<T> {
     pub fn new(runnable: T) -> App<T> {
-        let size = runnable.window_size();
+        let config = runnable.config();
         let opengl = OpenGL::V3_2;
-        let window: GlutinWindow =
-            WindowSettings::new("spinning-square", [size.width, size.height])
-                .graphics_api(opengl)
-                .exit_on_esc(true)
-                .build()
-                .unwrap();
+        let window: GlutinWindow = WindowSettings::new(config.title, [config.width, config.height])
+            .graphics_api(opengl)
+            .exit_on_esc(true)
+            .build()
+            .unwrap();
         let events = Events::new(EventSettings::new());
         App {
             window,

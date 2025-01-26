@@ -42,9 +42,7 @@ pub enum TurtleCommand {
     Walk,
     Turn(f64),
     DrawLine,
-    Scale(f64, f64),
     ChangeColor(Color),
-    ChangeRadius(f64),
     Multiple(Vec<TurtleCommand>),
     Push,
     Pop,
@@ -55,9 +53,7 @@ impl TurtleCommand {
         match self {
             TurtleCommand::Walk => st.transform = st.transform.trans(0.0, st.len),
             TurtleCommand::Turn(angle) => st.transform = st.transform.rot_rad(angle),
-            TurtleCommand::Scale(sc_x, sc_y) => st.transform = st.transform.scale(sc_x, sc_y),
             TurtleCommand::ChangeColor(col) => st.color = col,
-            TurtleCommand::ChangeRadius(r) => st.radius = r,
             TurtleCommand::DrawLine => {
                 line(
                     st.color,
