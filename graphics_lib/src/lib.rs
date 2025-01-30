@@ -1,6 +1,6 @@
 use std::process::{Command, ExitStatus};
 
-const SCREENSHOT_DIR: &str = "./screnshots";
+const SCREENSHOT_DIR: &str = "./screenshots";
 
 pub mod app;
 mod drawable;
@@ -31,12 +31,17 @@ pub struct WindowConfig {
 pub trait Runnable: Drawable + Updatable + EventHandler {
     fn config(&self) -> WindowConfig;
     fn setup(&mut self, _: &SetupContext) {}
-    fn screnshot(&self) -> Result<ExitStatus, std::io::Error> {
-        let title = self.config().title;
-        Command::new("scrot")
+    fn screenshot(&self) {
+        let title = self.config().title.replace(" ", "");
+        let date_str = chrono::Local::now().format("%Y%m%d_%H%M%s");
+        let res = Command::new("scrot")
             .arg("--focused")
             .arg("-F")
-            .arg(format!("{SCREENSHOT_DIR}/{title}.png"))
-            .status()
+            .arg(format!("{SCREENSHOT_DIR}/{title}{date_str}.png"))
+            .status();
+        match res {
+            Ok(status) => println!("took screenshot exit status {status}"),
+            Err(err) => println!("could not take screenshot: {err}"),
+        }
     }
 }

@@ -107,7 +107,7 @@ impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
                 let top_left_y = y as f64 * cell_height;
                 let cell = &self.cells[x][y];
 
-                if cell.visited {
+                if cell.visited && !self.done {
                     rectangle(
                         [0.0, 1.0, 0.0, 1.0],
                         [top_left_x, top_left_y, cell_width, cell_height],
@@ -116,7 +116,7 @@ impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
                     );
                 }
 
-                if (x, y) == self.next_unvisited {
+                if (x, y) == self.next_unvisited && !self.done {
                     rectangle(
                         [1.0, 0.0, 0.0, 1.0],
                         [top_left_x, top_left_y, cell_width, cell_height],

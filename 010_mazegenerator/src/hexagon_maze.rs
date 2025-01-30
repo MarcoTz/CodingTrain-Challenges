@@ -179,7 +179,7 @@ impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
                 let top_y = y as f64 * cell_height - y as f64 * col_offset;
                 let cell = &self.cells[x][y];
 
-                if cell.visited {
+                if cell.visited && !self.done {
                     polygon(
                         [0.0, 1.0, 0.0, 1.0],
                         &[
@@ -195,7 +195,7 @@ impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
                     );
                 }
 
-                if (x, y) == self.next_unvisited {
+                if (x, y) == self.next_unvisited && !self.done {
                     polygon(
                         [1.0, 0.0, 0.0, 1.0],
                         &[

@@ -149,6 +149,7 @@ impl EventHandler for ReactionDiffusion {
                         cell.concentration_b = 0.0;
                     }
                 }
+                Key::P => self.screenshot(),
                 _ => return,
             }
         }

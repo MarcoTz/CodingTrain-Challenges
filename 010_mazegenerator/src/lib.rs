@@ -51,9 +51,16 @@ impl Updatable for MazeGenerator {
 
 impl EventHandler for MazeGenerator {
     fn handle_input(&mut self, ctx: &InputContext) {
-        if ctx.args.button == Button::Keyboard(Key::Space) && ctx.args.state == ButtonState::Release
-        {
+        if ctx.args.state != ButtonState::Release {
+            return;
+        }
+
+        if ctx.args.button == Button::Keyboard(Key::Space) {
             self.show_hexagon = !self.show_hexagon;
+        }
+
+        if ctx.args.button == Button::Keyboard(Key::P) {
+            self.screenshot();
         }
     }
 }
