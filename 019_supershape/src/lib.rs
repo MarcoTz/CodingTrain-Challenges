@@ -1,10 +1,10 @@
-use graphics::{rectangle, types::Color /*DrawState*/};
-use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
-    SetupContext, Updatable, UpdateContext, WindowConfig,
+use graphics::{
+    rectangle, Color, DrawState, Drawable, DrawingContext, EventHandler, Graphics, InputContext,
+    Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
 };
+use math::vec2d::Vec2D;
 use piston::{Button, ButtonState, Key, ResizeArgs};
-//use piston_window::{text, Glyphs, TextureSettings};
+use piston_window::{text, Glyphs, TextureSettings};
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -83,19 +83,25 @@ impl Drawable for SuperShape {
                 rectangle(COLOR_INSIDE, [x as f64, y as f64, 5.0, 5.0], transform, gl);
             }
         }
-        /*let mut glyphs = todo!(); Glyphs::from_bytes(
+        let mut glyphs = Glyphs::from_bytes(
             include_bytes!("font.ttf",),
-            &ctx.texture_context,
+            ctx.create_texture_context(),
             TextureSettings::new(),
         )
-        .unwrap()*/
-        /*text::Text::new_color([0.0, 0.0, 1.0, 1.0], 18).draw(
-            &format!("{}", self.m),
-            &mut glyphs,
-            &DrawState::new_alpha(),
-            transform,
-            gl,
-        );*/
+        .unwrap();
+        text::Text::new_color([0.0, 0.0, 1.0, 1.0], 18)
+            .draw_pos(
+                &format!("{}", self.m),
+                [
+                    ctx.args.window_size[0] / 2.0,
+                    ctx.args.window_size[1] - 20.0,
+                ],
+                &mut glyphs,
+                &DrawState::new_alpha(),
+                transform,
+                gl,
+            )
+            .unwrap();
     }
 }
 

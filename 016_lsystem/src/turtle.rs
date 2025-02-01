@@ -1,5 +1,4 @@
-use graphics::{line, types::Color, Transformed};
-use graphics_lib::{Drawable, DrawingContext, Graphics};
+use graphics::{line, Color, Drawable, DrawingContext, Graphics, Transformed};
 pub struct Turtle {
     pub commands: Vec<Box<dyn TurtleInstructor>>,
     pub global_scale: f64,

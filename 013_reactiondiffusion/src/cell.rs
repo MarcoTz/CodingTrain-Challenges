@@ -1,8 +1,7 @@
 use super::{
     interpolate_color, DIFFUSION_A, DIFFUSION_B, FEED_RATE, KILL_RATE, NUM_COLS, NUM_ROWS,
 };
-use graphics::rectangle;
-use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use graphics::{rectangle, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 #[derive(Clone, Copy)]
 pub struct Cell {

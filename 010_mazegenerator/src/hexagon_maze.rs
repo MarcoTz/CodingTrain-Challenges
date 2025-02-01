@@ -1,6 +1,5 @@
 use core::array;
-use graphics::{line, polygon};
-use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use graphics::{line, polygon, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 pub struct Walls {
     top_left: bool,

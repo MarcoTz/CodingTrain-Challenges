@@ -1,8 +1,8 @@
-use graphics::{line, types::Color};
-use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, Runnable, Updatable,
+use graphics::{
+    line, Color, Drawable, DrawingContext, EventHandler, Graphics, Runnable, Updatable,
     UpdateContext, WindowConfig,
 };
+use math::vec2d::Vec2D;
 
 const WIDTH: f64 = 600.0;
 const HEIGHT: f64 = 600.0;

@@ -2,7 +2,7 @@ use super::{
     alien::Alien, ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_YSPEED, COL_DIST, ROW_DIST, ROW_OFFSET,
 };
 use core::array;
-use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use graphics::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 pub struct AlienShip<const N: usize, const M: usize> {
     pub alien_rows: [[Alien; M]; N],

@@ -1,4 +1,4 @@
-use graphics_lib::{
+use graphics::{
     Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
     UpdateContext, WindowConfig,
 };

@@ -1,7 +1,7 @@
 use super::GRID_SQUARE;
-use graphics::{rectangle, types::Color};
-use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Updatable, UpdateContext,
+use graphics::{
+    rectangle, Color, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Updatable,
+    UpdateContext,
 };
 use piston::{Button, Key};
 

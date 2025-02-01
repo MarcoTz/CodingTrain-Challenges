@@ -1,8 +1,8 @@
-use graphics::ellipse;
-use graphics_lib::{
-    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext,
-    Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
+use graphics::{
+    ellipse, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+    SetupContext, Updatable, UpdateContext, WindowConfig,
 };
+use math::{rand_between, vec2d::Vec2D};
 use piston::{Button, ButtonState, MouseButton, ResizeArgs};
 use std::iter;
 

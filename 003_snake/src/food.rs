@@ -1,6 +1,5 @@
 use super::{GRID_SQUARE, X_RES, Y_RES};
-use graphics::{ellipse, types::Color};
-use graphics_lib::{Drawable, DrawingContext, Graphics};
+use graphics::{ellipse, Color, Drawable, DrawingContext, Graphics};
 
 pub struct Food {
     pub x: u64,

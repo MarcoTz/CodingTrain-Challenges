@@ -36,13 +36,14 @@ impl<T: Runnable> App<T> {
 
     fn render(&mut self, e: &Event, args: &RenderArgs) {
         const BG: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        let ctx = self.window.create_texture_context();
+        let factory = self.window.factory.clone();
+        self.window.create_texture_context();
         self.window.draw_2d(e, |c, gl, _| {
             clear(BG, gl);
             let context = DrawingContext {
                 context: c,
                 args,
-                texture_context: ctx,
+                factory,
             };
             self.runnable.draw(&context, gl);
         });

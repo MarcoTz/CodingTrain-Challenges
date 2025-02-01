@@ -1,9 +1,9 @@
 use core::array;
-use graphics::ellipse;
-use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
-    Updatable, UpdateContext, WindowConfig,
+use graphics::{
+    ellipse, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
+    UpdateContext, WindowConfig,
 };
+use math::vec2d::Vec2D;
 
 const NUM_ROWS: usize = 5;
 const NUM_COLS: usize = 12;

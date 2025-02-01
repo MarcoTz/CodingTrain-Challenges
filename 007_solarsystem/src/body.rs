@@ -1,5 +1,7 @@
-use graphics::{ellipse, types::Color, Transformed};
-use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use graphics::{
+    ellipse, Color, Drawable, DrawingContext, Graphics, Transformed, Updatable, UpdateContext,
+};
+use math::vec2d::Vec2D;
 
 pub struct Body {
     pub center: Vec2D,

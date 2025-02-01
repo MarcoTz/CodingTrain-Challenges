@@ -1,6 +1,6 @@
-use graphics::{polygon, Transformed};
-use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Updatable, UpdateContext,
+use graphics::{
+    polygon, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Transformed,
+    Updatable, UpdateContext,
 };
 use piston::{Button, ButtonState, Key};
 

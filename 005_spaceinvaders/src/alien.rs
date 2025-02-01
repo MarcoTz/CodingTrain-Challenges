@@ -1,6 +1,6 @@
 use super::{ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_XSPEED};
-use graphics::polygon;
-use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use graphics::{polygon, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use math::vec2d::Vec2D;
 
 pub struct Alien {
     pub pos: Vec2D,

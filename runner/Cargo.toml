@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-graphics_lib = { path="../graphics_lib" }
+graphics = { path="../lib/graphics" }
 starfield = { path="../001_starfield" }
 mengersponge = { path="../002_mengersponge" }
 snake = { path="../003_snake" }

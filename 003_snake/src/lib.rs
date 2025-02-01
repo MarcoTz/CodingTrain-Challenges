@@ -1,7 +1,6 @@
-use graphics::{clear, rectangle};
-use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
-    UpdateContext, WindowConfig,
+use graphics::{
+    clear, rectangle, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+    Updatable, UpdateContext, WindowConfig,
 };
 
 mod food;

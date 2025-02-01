@@ -1,6 +1,5 @@
 use super::{PROJECTILE_LEN, PROJECTILE_THICKNESS, PROJECTILE_VELOCITY};
-use graphics::line;
-use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
+use graphics::{line, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 #[derive(Debug)]
 pub struct Projectile {

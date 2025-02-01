@@ -1,7 +1,8 @@
 [workspace]
 members = [
   "runner",
-  "graphics_lib",
+  "lib/graphics",
+  "lib/math",
   "001_starfield",
   "002_mengersponge",
   "003_snake",

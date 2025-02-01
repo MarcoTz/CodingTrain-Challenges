@@ -3,7 +3,7 @@ use super::{
     plant::Plant, sierpinski::Sierpinski, sierpinski_curve::SierpinskiCurve,
     turtle::TurtleInstructor,
 };
-use graphics_lib::{Updatable, UpdateContext};
+use graphics::{Updatable, UpdateContext};
 use std::fmt;
 
 pub enum System {

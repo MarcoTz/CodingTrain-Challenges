@@ -1,6 +1,5 @@
-use graphics::rectangle;
-use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
+use graphics::{
+    rectangle, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
     WindowConfig,
 };
 use piston::{Button, ButtonState, Key};

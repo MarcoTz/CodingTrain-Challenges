@@ -1,8 +1,8 @@
-use graphics::{ellipse, line, types::Color};
-use graphics_lib::{
-    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext,
-    Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
+use graphics::{
+    ellipse, line, Color, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+    SetupContext, Updatable, UpdateContext, WindowConfig,
 };
+use math::{rand_between, vec2d::Vec2D};
 use piston::{Button, ButtonState, Key, ResizeArgs};
 
 const WIDTH: f64 = 800.0;

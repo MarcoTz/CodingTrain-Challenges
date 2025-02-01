@@ -1,8 +1,8 @@
-use graphics::{circle_arc, line};
-use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, Runnable, Updatable,
+use graphics::{
+    circle_arc, line, Drawable, DrawingContext, EventHandler, Graphics, Runnable, Updatable,
     UpdateContext, WindowConfig,
 };
+use math::vec2d::Vec2D;
 use std::f64::consts::PI;
 
 const WINDOW_HEIGHT: f64 = 600.0;

@@ -1,4 +1,4 @@
-use graphics_lib::app::App;
+use graphics::app::App;
 use std::env;
 
 const ERR_EXIT_MSG: &str = "No number provided, try --help for help";

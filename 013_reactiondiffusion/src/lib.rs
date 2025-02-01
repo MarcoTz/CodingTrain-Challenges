@@ -1,8 +1,8 @@
-use graphics::types::Color;
-use graphics_lib::{
-    grid::Grid, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
-    SetupContext, Updatable, UpdateContext, WindowConfig,
+use graphics::{
+    Color, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, SetupContext,
+    Updatable, UpdateContext, WindowConfig,
 };
+use math::grid::Grid;
 use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs};
 //use std::time::Instant;
 

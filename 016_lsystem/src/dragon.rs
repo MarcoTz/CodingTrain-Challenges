@@ -2,7 +2,7 @@ use super::{
     l_system::{LSystem, Symbol},
     turtle::{TurtleCommand, TurtleInstructor, TurtleState},
 };
-use graphics_lib::DrawingContext;
+use graphics::DrawingContext;
 use std::{collections::HashMap, f64::consts::PI, hash::Hash};
 
 #[derive(PartialEq, Eq, Hash, Clone)]

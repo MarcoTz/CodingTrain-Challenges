@@ -1,8 +1,8 @@
-use graphics::{ellipse, types::Color};
-use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+use graphics::{
+    ellipse, Color, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
     Updatable, UpdateContext, WindowConfig,
 };
+use math::vec2d::Vec2D;
 use piston::{Button, ButtonState, MouseButton};
 
 const WIDTH: f64 = 800.0;
