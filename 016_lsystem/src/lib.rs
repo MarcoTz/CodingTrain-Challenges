@@ -1,8 +1,7 @@
 use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
-    WindowConfig,
+    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
+    UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key};
 
 mod algae;
@@ -43,7 +42,7 @@ impl SystemRunner {
 }
 
 impl Drawable for SystemRunner {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         self.turtle.draw(ctx, gl)
     }
 }

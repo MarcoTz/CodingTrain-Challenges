@@ -1,6 +1,5 @@
 use graphics::{line, types::Color, Transformed};
-use graphics_lib::{Drawable, DrawingContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{Drawable, DrawingContext, Graphics};
 pub struct Turtle {
     pub commands: Vec<Box<dyn TurtleInstructor>>,
     pub global_scale: f64,
@@ -49,7 +48,7 @@ pub enum TurtleCommand {
 }
 
 impl TurtleCommand {
-    fn run(self, st: &mut TurtleState, gl: &mut GlGraphics) {
+    fn run(self, st: &mut TurtleState, gl: &mut Graphics) {
         match self {
             TurtleCommand::Walk => st.transform = st.transform.trans(0.0, st.len),
             TurtleCommand::Turn(angle) => st.transform = st.transform.rot_rad(angle),
@@ -81,7 +80,7 @@ pub trait TurtleInstructor {
 }
 
 impl Drawable for Turtle {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let mut state = self.commands.first().unwrap().start(ctx, self.iteration);
         state.len *= self.global_scale;
         for cmd in self.commands.iter() {

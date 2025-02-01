@@ -1,9 +1,8 @@
 use graphics::types::Color;
 use graphics_lib::{
-    grid::Grid, Drawable, DrawingContext, EventHandler, InputContext, Runnable, SetupContext,
-    Updatable, UpdateContext, WindowConfig,
+    grid::Grid, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+    SetupContext, Updatable, UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key, MouseButton, ResizeArgs};
 //use std::time::Instant;
 
@@ -87,7 +86,7 @@ impl ReactionDiffusion {
 }
 
 impl Drawable for ReactionDiffusion {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         for cell in self.cells.iter() {
             cell.draw(ctx, gl);
         }

@@ -1,6 +1,5 @@
 use graphics::{ellipse, types::Color, Transformed};
-use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Updatable, UpdateContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 pub struct Body {
     pub center: Vec2D,
@@ -22,7 +21,7 @@ impl Body {
     }
 }
 impl Drawable for Body {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx
             .context
             .transform

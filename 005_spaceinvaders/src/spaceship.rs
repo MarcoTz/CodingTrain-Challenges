@@ -1,8 +1,7 @@
 use graphics::{polygon, Transformed};
 use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, InputContext, Updatable, UpdateContext,
+    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Updatable, UpdateContext,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key};
 
 use super::{projectile::Projectile, SHIP_ACCEL, SHIP_HEIGHT, SHIP_WIDTH};
@@ -29,7 +28,7 @@ impl SpaceShip {
 }
 
 impl Drawable for SpaceShip {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         for projectile in self.projectiles.iter() {
             projectile.draw(ctx, gl);
         }

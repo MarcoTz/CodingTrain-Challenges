@@ -1,9 +1,8 @@
 use graphics::{ellipse, line, types::Color};
 use graphics_lib::{
-    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable,
-    SetupContext, Updatable, UpdateContext, WindowConfig,
+    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext,
+    Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key, ResizeArgs};
 
 const WIDTH: f64 = 800.0;
@@ -114,7 +113,7 @@ impl SpaceColonization {
 }
 
 impl Drawable for SpaceColonization {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         for node in self.nodes.iter() {
             node.draw(ctx, gl);
         }
@@ -122,7 +121,7 @@ impl Drawable for SpaceColonization {
 }
 
 impl Drawable for TreeNode {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         for next in self.next.iter() {
             let thickness =

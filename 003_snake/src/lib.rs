@@ -1,9 +1,8 @@
 use graphics::{clear, rectangle};
 use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
-    WindowConfig,
+    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
+    UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 
 mod food;
 mod snake;
@@ -52,7 +51,7 @@ impl Updatable for SnakeGame {
 }
 
 impl Drawable for SnakeGame {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         let bg_light = [0.0, 1.0, 0.0, 1.0];
         let bg_dark = [0.5, 1.0, 0.0, 1.0];

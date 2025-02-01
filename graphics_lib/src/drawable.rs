@@ -1,10 +1,11 @@
+use super::{Graphics, TextureCtx};
 use graphics::{Context, Transformed};
-use opengl_graphics::GlGraphics;
 use piston::RenderArgs;
 
 pub struct DrawingContext<'a> {
     pub context: Context,
     pub args: &'a RenderArgs,
+    pub texture_context: TextureCtx,
 }
 
 impl<'a> DrawingContext<'a> {
@@ -19,5 +20,5 @@ impl<'a> DrawingContext<'a> {
     }
 }
 pub trait Drawable {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics);
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics);
 }

@@ -1,8 +1,7 @@
 use graphics_lib::{
-    Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable, UpdateContext,
-    WindowConfig,
+    Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable, Updatable,
+    UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, Key};
 
 mod hexagon_maze;
@@ -33,7 +32,7 @@ impl MazeGenerator {
 }
 
 impl Drawable for MazeGenerator {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         if self.show_hexagon {
             self.hexagon_maze.draw(ctx, gl);
         } else {

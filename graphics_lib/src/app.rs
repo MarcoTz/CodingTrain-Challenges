@@ -1,18 +1,16 @@
 use super::{DrawingContext, InputContext, Runnable, SetupContext, UpdateContext};
-use glutin_window::GlutinWindow;
 use graphics::clear;
-use opengl_graphics::{GlGraphics, OpenGL};
+use opengl_graphics::OpenGL;
 use piston::{
     event_loop::{EventSettings, Events},
     input::{ButtonArgs, RenderArgs, RenderEvent, UpdateArgs, UpdateEvent},
     window::WindowSettings,
-    ButtonEvent, MouseCursorEvent, ResizeEvent,
+    ButtonEvent, Event, MouseCursorEvent, ResizeEvent, Window,
 };
-use window::Window;
+use piston_window::PistonWindow;
 
 pub struct App<T: Runnable> {
-    gl: GlGraphics,
-    window: GlutinWindow,
+    window: PistonWindow,
     events: Events,
     runnable: T,
     mouse_pos: [f64; 2],
@@ -22,7 +20,7 @@ impl<T: Runnable> App<T> {
     pub fn new(runnable: T) -> App<T> {
         let config = runnable.config();
         let opengl = OpenGL::V3_2;
-        let window: GlutinWindow = WindowSettings::new(config.title, [config.width, config.height])
+        let window: PistonWindow = WindowSettings::new(config.title, [config.width, config.height])
             .graphics_api(opengl)
             .exit_on_esc(true)
             .build()
@@ -31,17 +29,21 @@ impl<T: Runnable> App<T> {
         App {
             window,
             events,
-            gl: GlGraphics::new(opengl),
             runnable,
             mouse_pos: [0.0, 0.0],
         }
     }
 
-    fn render(&mut self, args: &RenderArgs) {
+    fn render(&mut self, e: &Event, args: &RenderArgs) {
         const BG: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        self.gl.draw(args.viewport(), |c, gl| {
+        let ctx = self.window.create_texture_context();
+        self.window.draw_2d(e, |c, gl, _| {
             clear(BG, gl);
-            let context = DrawingContext { context: c, args };
+            let context = DrawingContext {
+                context: c,
+                args,
+                texture_context: ctx,
+            };
             self.runnable.draw(&context, gl);
         });
     }
@@ -75,8 +77,8 @@ impl<T: Runnable> App<T> {
             window_height: size.height,
         });
         while let Some(e) = self.events.next(&mut self.window) {
-            if let Some(args) = e.render_args() {
-                self.render(&args);
+            if let Some(args) = e.clone().render_args() {
+                self.render(&e, &args);
             }
             if let Some(args) = e.update_args() {
                 self.update(&args);

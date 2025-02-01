@@ -1,9 +1,8 @@
 use graphics::{line, Transformed};
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, SetupContext, Updatable,
-    UpdateContext, WindowConfig,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, Runnable, SetupContext,
+    Updatable, UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use std::f64::consts::PI;
 
 const WIDTH: f64 = 800.0;
@@ -59,7 +58,7 @@ impl FractalTree {
 }
 
 impl Drawable for FractalTree {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx
             .context
             .transform

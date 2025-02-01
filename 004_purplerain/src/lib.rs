@@ -1,9 +1,8 @@
 use graphics::{line, types::Color};
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Runnable, Updatable, UpdateContext,
-    WindowConfig,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, Runnable, Updatable,
+    UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 
 const WIDTH: f64 = 600.0;
 const HEIGHT: f64 = 600.0;
@@ -72,7 +71,7 @@ impl Updatable for RainDrop {
 }
 
 impl Drawable for RainDrop {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         line(
             PURPLE,
@@ -85,7 +84,7 @@ impl Drawable for RainDrop {
 }
 
 impl Drawable for RainCloud {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         for drop in self.drops.iter() {
             drop.draw(ctx, gl);
         }

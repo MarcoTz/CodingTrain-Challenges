@@ -1,7 +1,6 @@
 use core::array;
 use graphics::{line, polygon};
-use graphics_lib::{Drawable, DrawingContext, Updatable, UpdateContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 pub struct Walls {
     top_left: bool,
@@ -163,7 +162,7 @@ impl<const ROWS: usize, const COLS: usize> Maze<ROWS, COLS> {
 }
 
 impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let cell_height = 1.33 * (ctx.args.window_size[1] / ROWS as f64).floor();
         let cell_width = (ctx.args.window_size[0] / (COLS as f64 + 0.5)).floor();
 

@@ -1,9 +1,8 @@
 use graphics::{ellipse, types::Color};
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable,
-    UpdateContext, WindowConfig,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+    Updatable, UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, MouseButton};
 
 const WIDTH: f64 = 800.0;
@@ -66,7 +65,7 @@ impl Mitosis {
 }
 
 impl Drawable for Mitosis {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         for cell in self.cells.iter() {
             cell.draw(ctx, gl);
         }
@@ -74,7 +73,7 @@ impl Drawable for Mitosis {
 }
 
 impl Drawable for Cell {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         ellipse(
             self.color,

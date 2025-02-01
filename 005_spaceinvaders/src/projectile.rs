@@ -1,7 +1,6 @@
 use super::{PROJECTILE_LEN, PROJECTILE_THICKNESS, PROJECTILE_VELOCITY};
 use graphics::line;
-use graphics_lib::{Drawable, DrawingContext, Updatable, UpdateContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 #[derive(Debug)]
 pub struct Projectile {
@@ -19,7 +18,7 @@ impl Projectile {
 }
 
 impl Drawable for Projectile {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let trans = ctx.id_trans();
         line(
             [1.0, 1.0, 1.0, 1.0],

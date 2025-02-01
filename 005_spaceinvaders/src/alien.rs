@@ -1,7 +1,6 @@
 use super::{ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_XSPEED};
 use graphics::polygon;
-use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Updatable, UpdateContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{vec2d::Vec2D, Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 pub struct Alien {
     pub pos: Vec2D,
@@ -27,7 +26,7 @@ impl Alien {
 }
 
 impl Drawable for Alien {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         if self.dead {
             return;
         }

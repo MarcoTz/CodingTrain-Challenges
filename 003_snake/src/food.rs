@@ -1,7 +1,6 @@
 use super::{GRID_SQUARE, X_RES, Y_RES};
 use graphics::{ellipse, types::Color};
-use graphics_lib::{Drawable, DrawingContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{Drawable, DrawingContext, Graphics};
 
 pub struct Food {
     pub x: u64,
@@ -22,7 +21,7 @@ impl Food {
 }
 
 impl Drawable for Food {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         let x = (self.x as f64 + 0.1) * GRID_SQUARE;
         let y = (self.y as f64 + 0.1) * GRID_SQUARE;

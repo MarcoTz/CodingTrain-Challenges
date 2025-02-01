@@ -2,8 +2,7 @@ use super::{
     interpolate_color, DIFFUSION_A, DIFFUSION_B, FEED_RATE, KILL_RATE, NUM_COLS, NUM_ROWS,
 };
 use graphics::rectangle;
-use graphics_lib::{Drawable, DrawingContext, Updatable, UpdateContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 #[derive(Clone, Copy)]
 pub struct Cell {
@@ -33,7 +32,7 @@ impl Cell {
 }
 
 impl Drawable for Cell {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         let row_y = ctx.args.window_size[1] / NUM_ROWS as f64;
         let col_x = ctx.args.window_size[0] / NUM_COLS as f64;

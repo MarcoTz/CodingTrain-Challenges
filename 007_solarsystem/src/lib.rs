@@ -1,9 +1,8 @@
 use graphics::ellipse;
 use graphics_lib::{
-    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable,
-    SetupContext, Updatable, UpdateContext, WindowConfig,
+    rand_between, vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext,
+    Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 use piston::{Button, ButtonState, MouseButton, ResizeArgs};
 use std::iter;
 
@@ -76,7 +75,7 @@ impl SolarSystem {
 }
 
 impl Drawable for SolarSystem {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.center_trans();
         for star in self.background_stars.iter() {
             ellipse(

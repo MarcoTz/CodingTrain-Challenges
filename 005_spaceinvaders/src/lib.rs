@@ -1,10 +1,9 @@
 use core::array;
 use graphics::ellipse;
 use graphics_lib::{
-    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, InputContext, Runnable, Updatable,
-    UpdateContext, WindowConfig,
+    vec2d::Vec2D, Drawable, DrawingContext, EventHandler, Graphics, InputContext, Runnable,
+    Updatable, UpdateContext, WindowConfig,
 };
-use opengl_graphics::GlGraphics;
 
 const NUM_ROWS: usize = 5;
 const NUM_COLS: usize = 12;
@@ -86,7 +85,7 @@ impl Updatable for SpaceInvaders {
 }
 
 impl Drawable for SpaceInvaders {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         for star in self.background_stars.iter() {
             ellipse(

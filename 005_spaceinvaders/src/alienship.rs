@@ -2,8 +2,7 @@ use super::{
     alien::Alien, ALIEN_HEIGHT, ALIEN_WIDTH, ALIEN_YSPEED, COL_DIST, ROW_DIST, ROW_OFFSET,
 };
 use core::array;
-use graphics_lib::{Drawable, DrawingContext, Updatable, UpdateContext};
-use opengl_graphics::GlGraphics;
+use graphics_lib::{Drawable, DrawingContext, Graphics, Updatable, UpdateContext};
 
 pub struct AlienShip<const N: usize, const M: usize> {
     pub alien_rows: [[Alien; M]; N],
@@ -37,7 +36,7 @@ impl<const N: usize, const M: usize> AlienShip<N, M> {
 }
 
 impl<const N: usize, const M: usize> Drawable for AlienShip<N, M> {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut GlGraphics) {
+    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
         for row in self.alien_rows.iter() {
             for alien in row.iter() {
                 alien.draw(ctx, gl);
