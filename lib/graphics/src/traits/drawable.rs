@@ -1,4 +1,4 @@
-use super::Graphics;
+use crate::Graphics;
 use gfx_device_gl::Factory;
 use graphics::{Context, Transformed};
 use piston::RenderArgs;

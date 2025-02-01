@@ -7,15 +7,12 @@ pub type TextureCtx = TextureContext<gfx_device_gl::Factory, Resources, CommandB
 pub type Graphics<'a> = gfx_graphics::GfxGraphics<'a, Resources, CommandBuffer>;
 
 pub mod app;
-mod drawable;
-mod eventhandler;
-mod runnable;
-mod updatable;
+mod traits;
 
-pub use drawable::{Drawable, DrawingContext};
-pub use eventhandler::{EventHandler, InputContext};
-pub use runnable::{Runnable, SetupContext, WindowConfig};
-pub use updatable::{Updatable, UpdateContext};
+pub use traits::drawable::{Drawable, DrawingContext};
+pub use traits::eventhandler::{EventHandler, InputContext};
+pub use traits::runnable::{Runnable, SetupContext, WindowConfig};
+pub use traits::updatable::{Updatable, UpdateContext};
 
 // reexports from piston graphics
 pub use graphics::{

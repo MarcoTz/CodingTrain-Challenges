@@ -1,4 +1,5 @@
-use super::{Drawable, EventHandler, Updatable, SCREENSHOT_DIR};
+use super::{drawable::Drawable, eventhandler::EventHandler, updatable::Updatable};
+use crate::SCREENSHOT_DIR;
 use std::process::Command;
 
 pub struct SetupContext {
