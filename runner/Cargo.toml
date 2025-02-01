@@ -5,16 +5,16 @@ edition = "2021"
 
 [dependencies]
 graphics = { path="../lib/graphics" }
-starfield = { path="../001_starfield" }
-mengersponge = { path="../002_mengersponge" }
-snake = { path="../003_snake" }
-purplerain = { path="../004_purplerain" }
-spaceinvaders= { path="../005_spaceinvaders" }
-mitosis={path="../006_mitosis"}
-solarsystem={path="../007_solarsystem"}
-mazegenerator={path="../010_mazegenerator"}
-reactiondiffusion={path="../013_reactiondiffusion"}
-fractaltrees={path="../014_fractaltrees"}
-lsystem={path="../016_lsystem"}
-spacecolonization={path="../017_spacecolonization"}
-supershape={path="../019_supershape"}
+starfield = { path="../challenges/001_starfield" }
+mengersponge = { path="../challenges/002_mengersponge" }
+snake = { path="../challenges/003_snake" }
+purplerain = { path="../challenges/004_purplerain" }
+spaceinvaders= { path="../challenges/005_spaceinvaders" }
+mitosis={path="../challenges/006_mitosis"}
+solarsystem={path="../challenges/007_solarsystem"}
+mazegenerator={path="../challenges/010_mazegenerator"}
+reactiondiffusion={path="../challenges/013_reactiondiffusion"}
+fractaltrees={path="../challenges/014_fractaltrees"}
+lsystem={path="../challenges/016_lsystem"}
+spacecolonization={path="../challenges/017_spacecolonization"}
+supershape={path="../challenges/019_supershape"}

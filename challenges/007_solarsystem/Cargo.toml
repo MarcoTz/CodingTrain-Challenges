@@ -1,10 +1,12 @@
 [package]
-name = "mengersponge"
+name = "solarsystem"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies] 
-graphics = {path="../lib/graphics"}
+graphics = {path="../../lib/graphics"}
+math = {path="../../lib/math"}
+rand = "0.8.5"
 piston = "1.0.0" 
 pistoncore-window = "1.0.0"
 pistoncore-glutin_window = "0.72.0" 

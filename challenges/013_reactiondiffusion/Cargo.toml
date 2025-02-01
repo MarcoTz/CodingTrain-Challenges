@@ -1,14 +1,13 @@
 [package]
-name = "supershape"
+name = "reactiondiffusion"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies] 
-graphics= {path="../lib/graphics"}
-math={path="../lib/math"}
+graphics = {path="../../lib/graphics"}
+math ={path="../../lib/math"}
 rand = "0.8.5"
 piston = "1.0.0" 
-piston_window="0.132.0"
 pistoncore-window = "1.0.0"
 pistoncore-glutin_window = "0.72.0" 
 piston2d-opengl_graphics = "0.85.0"

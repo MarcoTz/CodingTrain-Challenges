@@ -1,10 +1,10 @@
 [package]
-name = "lsystem"
+name = "snake"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies] 
-graphics = {path="../lib/graphics"}
+graphics = {path="../../lib/graphics"}
 rand = "0.8.5"
 piston = "1.0.0" 
 pistoncore-window = "1.0.0"

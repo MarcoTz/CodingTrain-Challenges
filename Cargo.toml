@@ -3,19 +3,19 @@ members = [
   "runner",
   "lib/graphics",
   "lib/math",
-  "001_starfield",
-  "002_mengersponge",
-  "003_snake",
-  "004_purplerain",
-  "005_spaceinvaders",
-  "006_mitosis",
-  "007_solarsystem",
-  "010_mazegenerator",
-  "013_reactiondiffusion",
-  "014_fractaltrees",
-  "016_lsystem",
-  "017_spacecolonization",
-  "019_supershape"
+  "challenges/001_starfield",
+  "challenges/002_mengersponge",
+  "challenges/003_snake",
+  "challenges/004_purplerain",
+  "challenges/005_spaceinvaders",
+  "challenges/006_mitosis",
+  "challenges/007_solarsystem",
+  "challenges/010_mazegenerator",
+  "challenges/013_reactiondiffusion",
+  "challenges/014_fractaltrees",
+  "challenges/016_lsystem",
+  "challenges/017_spacecolonization",
+  "challenges/019_supershape"
 ]
 
 resolver = "2"
