@@ -57,11 +57,11 @@ impl<T> Grid<T> {
         self.elements.get_mut(ind)
     }
 
-    pub fn iter_mut<'a>(&'a mut self) -> std::slice::IterMut<'a, T> {
+    pub fn iter_mut(&mut self) -> std::slice::IterMut<T> {
         self.elements.iter_mut()
     }
 
-    pub fn iter<'a>(&'a self) -> std::slice::Iter<'a, T> {
+    pub fn iter(&self) -> std::slice::Iter<T> {
         self.elements.iter()
     }
 

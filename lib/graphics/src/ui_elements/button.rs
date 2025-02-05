@@ -1,7 +1,7 @@
 use crate::{rectangle, Color, Drawable, DrawingContext, Graphics};
 use math::vec2d::Vec2D;
 use piston::{Button as PisButton, ButtonArgs, ButtonState, MouseButton};
-use piston_window::{text, DrawState};
+use piston_window::text;
 
 pub struct Button {
     pub width: f64,

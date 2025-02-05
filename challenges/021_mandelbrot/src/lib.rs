@@ -65,10 +65,7 @@ impl Mandelbrot {
             for j in 0..=window_height.ceil() as usize {
                 let x = self.min_x + i as f64 * step_x;
                 let y = self.min_y + j as f64 * step_y;
-                let inside = self.inside(Vec2D {
-                    x: x as f64,
-                    y: y as f64,
-                });
+                let inside = self.inside(Vec2D { x, y });
                 self.computed[i].push(inside);
             }
         }
