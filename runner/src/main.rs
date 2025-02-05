@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(supershape::SuperShape::new()).run();
+        return App::new(mandelbrot::Mandelbrot::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -37,6 +37,8 @@ fn run_app(args: &mut env::Args) {
         17 => App::new(spacecolonization::SpaceColonization::new()).run(),
         18 => panic!("3D fractal trees are not implemented"),
         19 => App::new(supershape::SuperShape::new()).run(),
+        20 => panic!("3D cloth is not implemented"),
+        21 => App::new(mandelbrot::Mandelbrot::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }
