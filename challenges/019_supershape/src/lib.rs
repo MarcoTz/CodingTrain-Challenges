@@ -13,8 +13,8 @@ const COLOR_INSIDE: Color = [1.0, 0.0, 0.0, 1.0];
 const TOLERANCE: f64 = 0.01;
 const RESOLUTION: f64 = 2.0;
 
-const BUTTON_COLOR: Color = [0.0, 0.0, 1.0, 1.0];
-const TEXT_COLOR: Color = [1.0, 0.0, 0.0, 1.0];
+const BUTTON_COLOR: Color = [0.0, 0.4, 0.8, 1.0];
+const TEXT_COLOR: Color = [0.0, 0.0, 0.0, 1.0];
 const FONT_SIZE: u32 = 18;
 const BUTTON_WIDTH: f64 = 60.0;
 const BUTTON_DIST: f64 = 5.0;
@@ -159,18 +159,23 @@ pub struct SuperShape {
 
 impl SuperShape {
     pub fn new() -> SuperShape {
-        let mut constants = vec![];
+        let mut new = SuperShape {
+            constants: vec![],
+            computed: vec![],
+            paused: true,
+        };
+        new.create_constants();
+        new
+    }
+
+    fn create_constants(&mut self) {
+        self.constants.clear();
         let mut next_label = Some(ConstLabel::default());
         while next_label.is_some() {
             let label = next_label.unwrap();
-            constants.push(ShapeConstant::new(label, label.default_value()));
+            self.constants
+                .push(ShapeConstant::new(label, label.default_value()));
             next_label = label.next();
-        }
-
-        SuperShape {
-            constants,
-            computed: vec![],
-            paused: true,
         }
     }
 
@@ -235,6 +240,7 @@ impl Updatable for SuperShape {
 
 impl EventHandler for SuperShape {
     fn handle_resize(&mut self, ctx: &ResizeArgs) {
+        self.create_constants();
         self.compute(ctx.window_size[0], ctx.window_size[1]);
     }
 
