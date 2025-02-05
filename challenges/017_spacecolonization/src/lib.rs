@@ -113,7 +113,7 @@ impl SpaceColonization {
 }
 
 impl Drawable for SpaceColonization {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for node in self.nodes.iter() {
             node.draw(ctx, gl);
         }
@@ -121,7 +121,7 @@ impl Drawable for SpaceColonization {
 }
 
 impl Drawable for TreeNode {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         for next in self.next.iter() {
             let thickness =

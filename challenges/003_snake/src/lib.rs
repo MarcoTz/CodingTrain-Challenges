@@ -50,7 +50,7 @@ impl Updatable for SnakeGame {
 }
 
 impl Drawable for SnakeGame {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         let bg_light = [0.0, 1.0, 0.0, 1.0];
         let bg_dark = [0.5, 1.0, 0.0, 1.0];

@@ -8,6 +8,7 @@ pub type Graphics<'a> = gfx_graphics::GfxGraphics<'a, Resources, CommandBuffer>;
 
 pub mod app;
 mod traits;
+pub mod ui_elements;
 
 pub use traits::drawable::{Drawable, DrawingContext};
 pub use traits::eventhandler::{EventHandler, InputContext};

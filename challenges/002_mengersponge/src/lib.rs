@@ -24,7 +24,7 @@ impl Default for Menger {
 }
 
 impl Drawable for Menger {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.center_trans();
         let mut width = ctx.args.window_size[0] / 1.5;
         width = width + ((3 - width as u64 % 3) as f64);

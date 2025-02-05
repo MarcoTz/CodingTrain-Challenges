@@ -74,12 +74,12 @@ impl TurtleCommand {
 }
 
 pub trait TurtleInstructor {
-    fn start(&self, ctx: &DrawingContext, num_commands: u64) -> TurtleState;
+    fn start(&self, ctx: &mut DrawingContext, num_commands: u64) -> TurtleState;
     fn command(&self) -> TurtleCommand;
 }
 
 impl Drawable for Turtle {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let mut state = self.commands.first().unwrap().start(ctx, self.iteration);
         state.len *= self.global_scale;
         for cmd in self.commands.iter() {

@@ -75,7 +75,7 @@ impl SolarSystem {
 }
 
 impl Drawable for SolarSystem {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.center_trans();
         for star in self.background_stars.iter() {
             ellipse(

@@ -92,7 +92,7 @@ impl<const ROWS: usize, const COLS: usize> Maze<ROWS, COLS> {
 }
 
 impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let cell_height = (ctx.args.window_size[1] / (ROWS as f64)).floor();
         let cell_width = (ctx.args.window_size[0] / (COLS as f64)).floor();
 

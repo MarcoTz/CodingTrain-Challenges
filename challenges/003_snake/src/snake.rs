@@ -74,7 +74,7 @@ impl Snake {
 }
 
 impl Drawable for BodySegment {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let mut x = (self.x as f64 + 0.1) * GRID_SQUARE;
         let mut y = (self.y as f64 + 0.1) * GRID_SQUARE;
         let transform = ctx.id_trans();
@@ -90,7 +90,7 @@ impl Drawable for BodySegment {
 }
 
 impl Drawable for Snake {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for seg in self.tail.iter() {
             seg.draw(ctx, gl);
         }

@@ -28,7 +28,7 @@ impl SpaceShip {
 }
 
 impl Drawable for SpaceShip {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for projectile in self.projectiles.iter() {
             projectile.draw(ctx, gl);
         }

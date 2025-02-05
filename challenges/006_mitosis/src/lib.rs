@@ -65,7 +65,7 @@ impl Mitosis {
 }
 
 impl Drawable for Mitosis {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for cell in self.cells.iter() {
             cell.draw(ctx, gl);
         }
@@ -73,7 +73,7 @@ impl Drawable for Mitosis {
 }
 
 impl Drawable for Cell {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         ellipse(
             self.color,

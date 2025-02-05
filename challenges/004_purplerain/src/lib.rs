@@ -71,7 +71,7 @@ impl Updatable for RainDrop {
 }
 
 impl Drawable for RainDrop {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         line(
             PURPLE,
@@ -84,7 +84,7 @@ impl Drawable for RainDrop {
 }
 
 impl Drawable for RainCloud {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for drop in self.drops.iter() {
             drop.draw(ctx, gl);
         }

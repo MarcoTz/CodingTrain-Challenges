@@ -31,7 +31,7 @@ impl Cell {
 }
 
 impl Drawable for Cell {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         let row_y = ctx.args.window_size[1] / NUM_ROWS as f64;
         let col_x = ctx.args.window_size[0] / NUM_COLS as f64;

@@ -23,7 +23,7 @@ impl Body {
     }
 }
 impl Drawable for Body {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx
             .context
             .transform

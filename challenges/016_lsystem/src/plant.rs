@@ -52,7 +52,7 @@ impl Plant {
 }
 
 impl TurtleInstructor for Plant {
-    fn start(&self, ctx: &DrawingContext, iter: u64) -> TurtleState {
+    fn start(&self, ctx: &mut DrawingContext, iter: u64) -> TurtleState {
         let mut st = TurtleState::new(
             ctx.id_trans()
                 .trans(ctx.args.window_size[0] / 2.0, ctx.args.window_size[1])

@@ -31,7 +31,7 @@ impl Star {
 }
 
 impl Drawable for Star {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.center_trans();
         let mut shortened = self.pos;
         shortened.set_abs(self.pos.abs() - self.len);
@@ -88,7 +88,7 @@ impl Default for StarSpawner {
 }
 
 impl Drawable for StarSpawner {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for star in self.stars.iter() {
             star.draw(ctx, gl);
         }

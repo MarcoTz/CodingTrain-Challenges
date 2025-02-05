@@ -85,7 +85,7 @@ impl Updatable for SpaceInvaders {
 }
 
 impl Drawable for SpaceInvaders {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
         for star in self.background_stars.iter() {
             ellipse(

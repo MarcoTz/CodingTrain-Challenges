@@ -26,7 +26,7 @@ impl Alien {
 }
 
 impl Drawable for Alien {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         if self.dead {
             return;
         }

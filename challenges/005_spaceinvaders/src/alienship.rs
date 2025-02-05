@@ -36,7 +36,7 @@ impl<const N: usize, const M: usize> AlienShip<N, M> {
 }
 
 impl<const N: usize, const M: usize> Drawable for AlienShip<N, M> {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         for row in self.alien_rows.iter() {
             for alien in row.iter() {
                 alien.draw(ctx, gl);

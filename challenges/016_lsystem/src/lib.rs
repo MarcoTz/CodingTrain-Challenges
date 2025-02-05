@@ -42,7 +42,7 @@ impl SystemRunner {
 }
 
 impl Drawable for SystemRunner {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         self.turtle.draw(ctx, gl)
     }
 }

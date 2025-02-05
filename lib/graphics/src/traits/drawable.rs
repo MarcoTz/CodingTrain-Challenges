@@ -1,13 +1,12 @@
 use crate::Graphics;
-use gfx_device_gl::Factory;
 use graphics::{Context, Transformed};
 use piston::RenderArgs;
-use piston_window::{G2dTextureContext, TextureContext};
+use piston_window::Glyphs;
 
 pub struct DrawingContext<'a> {
-    pub context: Context,
+    pub context: &'a Context,
     pub args: &'a RenderArgs,
-    pub factory: Factory,
+    pub glyphs: &'a mut Glyphs,
 }
 
 impl<'a> DrawingContext<'a> {
@@ -21,14 +20,8 @@ impl<'a> DrawingContext<'a> {
             self.args.window_size[1] / 2.0,
         )
     }
-
-    pub fn create_texture_context(&self) -> G2dTextureContext {
-        let mut factory = self.factory.clone();
-        let encoder = factory.create_command_buffer().into();
-        TextureContext { factory, encoder }
-    }
 }
 
 pub trait Drawable {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics);
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics);
 }

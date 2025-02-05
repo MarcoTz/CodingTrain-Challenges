@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies] 
+math = {path="../math"}
 rand = "0.8.5"
 piston = "1.0.0" 
 piston_window="0.132.0"

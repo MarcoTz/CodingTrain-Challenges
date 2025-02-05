@@ -1,10 +1,10 @@
 use graphics::{
-    rectangle, Color, DrawState, Drawable, DrawingContext, EventHandler, Graphics, InputContext,
-    Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
+    rectangle, ui_elements::Button, Color, Drawable, DrawingContext, EventHandler, Graphics,
+    InputContext, Runnable, SetupContext, Updatable, UpdateContext, WindowConfig,
 };
 use math::vec2d::Vec2D;
-use piston::{Button, ButtonState, Key, ResizeArgs};
-use piston_window::{text, Glyphs, TextureSettings};
+use piston::{Button as PisButton, ButtonState, Key, ResizeArgs};
+use std::fmt;
 
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 900.0;
@@ -13,26 +13,162 @@ const COLOR_INSIDE: Color = [1.0, 0.0, 0.0, 1.0];
 const TOLERANCE: f64 = 0.01;
 const RESOLUTION: f64 = 2.0;
 
+const BUTTON_COLOR: Color = [0.0, 0.0, 1.0, 1.0];
+const TEXT_COLOR: Color = [1.0, 0.0, 0.0, 1.0];
+const FONT_SIZE: u32 = 18;
+const BUTTON_WIDTH: f64 = 60.0;
+const BUTTON_DIST: f64 = 5.0;
+const BUTTON_HEIGHT: f64 = 30.0;
+const VAL_CHANGE: f64 = 0.1;
+
+#[derive(Clone, Copy)]
+enum ConstLabel {
+    M,
+    N1,
+    N2,
+    N3,
+    A,
+    B,
+}
+
+impl Default for ConstLabel {
+    fn default() -> ConstLabel {
+        ConstLabel::M
+    }
+}
+
+impl ConstLabel {
+    fn prev(self) -> ConstLabel {
+        match self {
+            ConstLabel::B => ConstLabel::A,
+            ConstLabel::A => ConstLabel::N3,
+            ConstLabel::N3 => ConstLabel::N2,
+            ConstLabel::N2 => ConstLabel::N1,
+            ConstLabel::N1 => ConstLabel::M,
+            ConstLabel::M => ConstLabel::B,
+        }
+    }
+
+    fn next(self) -> Option<ConstLabel> {
+        match self {
+            ConstLabel::M => Some(ConstLabel::N1),
+            ConstLabel::N1 => Some(ConstLabel::N2),
+            ConstLabel::N2 => Some(ConstLabel::N3),
+            ConstLabel::N3 => Some(ConstLabel::A),
+            ConstLabel::A => Some(ConstLabel::B),
+            ConstLabel::B => None,
+        }
+    }
+
+    fn default_value(&self) -> f64 {
+        match self {
+            ConstLabel::M => 1.0,
+            ConstLabel::N1 => 0.3,
+            ConstLabel::N2 => 0.3,
+            ConstLabel::N3 => 0.3,
+            ConstLabel::A => 1.0,
+            ConstLabel::B => 1.0,
+        }
+    }
+
+    fn start_x(self) -> f64 {
+        if matches!(self, ConstLabel::M) {
+            return BUTTON_DIST;
+        }
+        self.prev().start_x() + 2.0 * (BUTTON_DIST + BUTTON_WIDTH)
+    }
+}
+
+impl fmt::Display for ConstLabel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            ConstLabel::M => f.write_str("m"),
+            ConstLabel::N1 => f.write_str("n1"),
+            ConstLabel::N2 => f.write_str("n2"),
+            ConstLabel::N3 => f.write_str("n3"),
+            ConstLabel::A => f.write_str("a"),
+            ConstLabel::B => f.write_str("b"),
+        }
+    }
+}
+
+struct ShapeConstant {
+    label: ConstLabel,
+    value: f64,
+    inc_button: Button,
+    dec_button: Button,
+}
+
+impl ShapeConstant {
+    pub fn new(label: ConstLabel, val: f64) -> ShapeConstant {
+        let inc_x = label.start_x();
+        let dec_x = inc_x + BUTTON_WIDTH + BUTTON_DIST;
+        let y = HEIGHT - BUTTON_HEIGHT;
+        let inc_label = format!("{label}+");
+        let dec_label = format!("{label}-");
+        ShapeConstant {
+            label,
+            value: val,
+            inc_button: Button::new(
+                inc_x,
+                y,
+                BUTTON_WIDTH,
+                BUTTON_HEIGHT,
+                BUTTON_COLOR,
+                &inc_label,
+                TEXT_COLOR,
+                FONT_SIZE,
+            ),
+            dec_button: Button::new(
+                dec_x,
+                y,
+                BUTTON_WIDTH,
+                BUTTON_HEIGHT,
+                BUTTON_COLOR,
+                &dec_label,
+                TEXT_COLOR,
+                FONT_SIZE,
+            ),
+        }
+    }
+}
+
+impl Drawable for ShapeConstant {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
+        self.inc_button.draw(ctx, gl);
+        self.dec_button.draw(ctx, gl);
+    }
+}
+
+impl EventHandler for ShapeConstant {
+    fn handle_input(&mut self, ctx: &InputContext) {
+        if self.inc_button.clicked(ctx.mouse_pos, ctx.args) {
+            self.value += VAL_CHANGE;
+        }
+        if self.dec_button.clicked(ctx.mouse_pos, ctx.args) {
+            self.value -= VAL_CHANGE;
+        }
+    }
+}
+
 pub struct SuperShape {
-    n_1: f64,
-    n_2: f64,
-    n_3: f64,
-    m: f64,
-    a: f64,
-    b: f64,
+    constants: Vec<ShapeConstant>,
     computed: Vec<Vec<bool>>,
     paused: bool,
 }
 
 impl SuperShape {
     pub fn new() -> SuperShape {
+        let mut constants = vec![];
+        let mut next_label = Some(ConstLabel::default());
+        while next_label.is_some() {
+            let label = next_label.unwrap();
+            constants.push(ShapeConstant::new(label, label.default_value()));
+            next_label = label.next();
+        }
+
         SuperShape {
-            m: 1.0,
-            n_1: 0.3,
-            n_2: 0.3,
-            n_3: 0.3,
-            a: 1.0,
-            b: 1.0,
+            constants,
             computed: vec![],
             paused: true,
         }
@@ -41,10 +177,11 @@ impl SuperShape {
     fn inside(&self, pt: Vec2D) -> bool {
         let arg = pt.arg();
         let r = pt.abs();
-        let arg_cos = (arg * self.m / 4.0).cos() / self.a;
-        let arg_sin = (arg * self.m / 4.0).sin() / self.b;
-        let sum = arg_cos.abs().powf(self.n_2) + arg_sin.abs().powf(self.n_3);
-        let res = 1.0 / sum.powf(1.0 / self.n_1);
+        let arg_cos = (arg * self.constants[0].value / 4.0).cos() / self.constants[4].value;
+        let arg_sin = (arg * self.constants[0].value / 4.0).sin() / self.constants[5].value;
+        let sum = arg_cos.abs().powf(self.constants[2].value)
+            + arg_sin.abs().powf(self.constants[3].value);
+        let res = 1.0 / sum.powf(1.0 / self.constants[1].value);
         res >= r - TOLERANCE && res <= r + TOLERANCE
     }
 
@@ -72,7 +209,7 @@ impl SuperShape {
 }
 
 impl Drawable for SuperShape {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let transform = ctx.id_trans();
 
         for x in 0..(ctx.args.window_size[0].ceil() as usize) {
@@ -83,35 +220,16 @@ impl Drawable for SuperShape {
                 rectangle(COLOR_INSIDE, [x as f64, y as f64, 5.0, 5.0], transform, gl);
             }
         }
-        let mut glyphs = Glyphs::from_bytes(
-            include_bytes!("font.ttf",),
-            ctx.create_texture_context(),
-            TextureSettings::new(),
-        )
-        .unwrap();
-        text::Text::new_color([0.0, 0.0, 1.0, 1.0], 18)
-            .draw_pos(
-                &format!("{}", self.m),
-                [
-                    ctx.args.window_size[0] / 2.0,
-                    ctx.args.window_size[1] - 20.0,
-                ],
-                &mut glyphs,
-                &DrawState::new_alpha(),
-                transform,
-                gl,
-            )
-            .unwrap();
+
+        for cons in self.constants.iter() {
+            cons.draw(ctx, gl);
+        }
     }
 }
 
 impl Updatable for SuperShape {
     fn update(&mut self, ctx: &UpdateContext) {
-        if !self.paused {
-            self.paused = true;
-            self.m += 1.0;
-            self.compute(ctx.window_width, ctx.window_height)
-        }
+        self.compute(ctx.window_width, ctx.window_height);
     }
 }
 
@@ -121,9 +239,14 @@ impl EventHandler for SuperShape {
     }
 
     fn handle_input(&mut self, ctx: &InputContext) {
-        if ctx.args.button == Button::Keyboard(Key::Space) && ctx.args.state == ButtonState::Release
+        if ctx.args.button == PisButton::Keyboard(Key::Space)
+            && ctx.args.state == ButtonState::Release
         {
             self.paused = false;
+        }
+
+        for cons in self.constants.iter_mut() {
+            cons.handle_input(ctx);
         }
     }
 }

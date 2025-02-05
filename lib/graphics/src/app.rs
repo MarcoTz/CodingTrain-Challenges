@@ -7,45 +7,58 @@ use piston::{
     window::WindowSettings,
     ButtonEvent, Event, MouseCursorEvent, ResizeEvent, Window,
 };
-use piston_window::PistonWindow;
+use piston_window::{Glyphs, PistonWindow, TextureSettings};
 
 pub struct App<T: Runnable> {
     window: PistonWindow,
     events: Events,
+
     runnable: T,
     mouse_pos: [f64; 2],
+    glyphs: Glyphs,
 }
 
 impl<T: Runnable> App<T> {
     pub fn new(runnable: T) -> App<T> {
         let config = runnable.config();
+
         let opengl = OpenGL::V3_2;
-        let window: PistonWindow = WindowSettings::new(config.title, [config.width, config.height])
-            .graphics_api(opengl)
-            .exit_on_esc(true)
-            .build()
-            .unwrap();
+        let mut window: PistonWindow =
+            WindowSettings::new(config.title, [config.width, config.height])
+                .graphics_api(opengl)
+                .exit_on_esc(true)
+                .build()
+                .unwrap();
+
         let events = Events::new(EventSettings::new());
+
+        let glyphs = Glyphs::from_bytes(
+            include_bytes!("font.ttf",),
+            window.create_texture_context(),
+            TextureSettings::new(),
+        )
+        .unwrap();
+
         App {
             window,
             events,
             runnable,
             mouse_pos: [0.0, 0.0],
+            glyphs,
         }
     }
 
     fn render(&mut self, e: &Event, args: &RenderArgs) {
         const BG: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        let factory = self.window.factory.clone();
-        self.window.create_texture_context();
-        self.window.draw_2d(e, |c, gl, _| {
+        self.window.draw_2d(e, |c, gl, device| {
             clear(BG, gl);
-            let context = DrawingContext {
-                context: c,
+            let mut context = DrawingContext {
+                context: &c,
                 args,
-                factory,
+                glyphs: &mut self.glyphs,
             };
-            self.runnable.draw(&context, gl);
+            self.runnable.draw(&mut context, gl);
+            self.glyphs.factory.encoder.flush(device);
         });
     }
 

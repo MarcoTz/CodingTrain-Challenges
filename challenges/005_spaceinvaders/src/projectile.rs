@@ -17,7 +17,7 @@ impl Projectile {
 }
 
 impl Drawable for Projectile {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         let trans = ctx.id_trans();
         line(
             [1.0, 1.0, 1.0, 1.0],

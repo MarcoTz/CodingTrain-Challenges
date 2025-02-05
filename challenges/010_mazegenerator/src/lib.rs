@@ -32,7 +32,7 @@ impl MazeGenerator {
 }
 
 impl Drawable for MazeGenerator {
-    fn draw(&self, ctx: &DrawingContext, gl: &mut Graphics) {
+    fn draw(&self, ctx: &mut DrawingContext, gl: &mut Graphics) {
         if self.show_hexagon {
             self.hexagon_maze.draw(ctx, gl);
         } else {
