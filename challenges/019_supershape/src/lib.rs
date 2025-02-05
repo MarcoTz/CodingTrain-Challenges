@@ -93,7 +93,6 @@ impl fmt::Display for ConstLabel {
 }
 
 struct ShapeConstant {
-    label: ConstLabel,
     value: f64,
     inc_button: Button,
     dec_button: Button,
@@ -107,7 +106,6 @@ impl ShapeConstant {
         let inc_label = format!("{label}+");
         let dec_label = format!("{label}-");
         ShapeConstant {
-            label,
             value: val,
             inc_button: Button::new(
                 inc_x,
