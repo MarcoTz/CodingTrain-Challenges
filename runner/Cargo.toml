@@ -19,3 +19,4 @@ lsystem={path="../challenges/016_lsystem"}
 spacecolonization={path="../challenges/017_spacecolonization"}
 supershape={path="../challenges/019_supershape"}
 mandelbrot={path="../challenges/021_mandelbrot"}
+juliaset={path="../challenges/022_juliaset"}
