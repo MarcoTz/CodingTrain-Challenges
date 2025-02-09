@@ -20,3 +20,4 @@ spacecolonization={path="../challenges/017_spacecolonization"}
 supershape={path="../challenges/019_supershape"}
 mandelbrot={path="../challenges/021_mandelbrot"}
 juliaset={path="../challenges/022_juliaset"}
+perlinnoise={path="../challenges/024_perlinnoise"}

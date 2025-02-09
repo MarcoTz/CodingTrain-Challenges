@@ -29,6 +29,17 @@ impl<T> Grid<T> {
         grid
     }
 
+    pub fn insert(&mut self, x: usize, y: usize, elem: T)
+    where
+        T: Default,
+    {
+        let ind = self.ind(x, y).unwrap();
+        while self.elements.len() <= ind {
+            self.elements.push(T::default());
+        }
+        self.elements[ind] = elem;
+    }
+
     fn ind(&self, x: usize, y: usize) -> Option<usize> {
         if x >= self.num_cols || y >= self.num_rows {
             return None;

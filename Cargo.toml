@@ -17,7 +17,8 @@ members = [
   "challenges/017_spacecolonization",
   "challenges/019_supershape",
   "challenges/021_mandelbrot",
-  "challenges/022_juliaset"
+  "challenges/022_juliaset",
+  "challenges/024_perlinnoise",
 ]
 
 resolver = "2"

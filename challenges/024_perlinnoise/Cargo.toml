@@ -1,0 +1,9 @@
+[package]
+name = "perlinnoise"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies] 
+graphics= {path="../../lib/graphics"}
+math={path="../../lib/math"}
+rand = "0.8.5"

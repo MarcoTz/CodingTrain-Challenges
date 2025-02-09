@@ -39,6 +39,12 @@ impl Vec2D {
         self.y.atan2(self.x)
     }
 
+    pub fn set_arg(&mut self, arg: f64) {
+        let abs = self.abs();
+        self.x = abs * arg.cos();
+        self.y = abs * arg.sin();
+    }
+
     pub fn dist(&self, other: &Vec2D) -> f64 {
         let x_dist = self.x - other.x;
         let y_dist = self.y - other.y;
@@ -53,6 +59,10 @@ impl Vec2D {
     pub fn tangent(&self) -> Vec2D {
         let arg = self.arg() + PI / 2.0;
         Vec2D::from_polar(1.0, arg)
+    }
+
+    pub fn dot(self, other: Vec2D) -> f64 {
+        self.x * other.x + self.y * other.y
     }
 }
 

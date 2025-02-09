@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(juliaset::JuliaSet::new()).run();
+        return App::new(perlinnoise::PerlinNoise::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -40,6 +40,8 @@ fn run_app(args: &mut env::Args) {
         20 => panic!("3D cloth is not implemented"),
         21 => App::new(mandelbrot::Mandelbrot::new()).run(),
         22 => App::new(juliaset::JuliaSet::new()).run(),
+        23 => App::new(supershape::SuperShape::new()).run(),
+        24 => App::new(perlinnoise::PerlinNoise::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }
