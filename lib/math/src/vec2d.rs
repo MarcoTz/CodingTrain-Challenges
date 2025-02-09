@@ -66,6 +66,15 @@ impl Vec2D {
     }
 }
 
+impl From<[f64; 2]> for Vec2D {
+    fn from(pos: [f64; 2]) -> Vec2D {
+        Vec2D {
+            x: pos[0],
+            y: pos[1],
+        }
+    }
+}
+
 impl Add for Vec2D {
     type Output = Vec2D;
     fn add(self, other: Vec2D) -> Self::Output {
