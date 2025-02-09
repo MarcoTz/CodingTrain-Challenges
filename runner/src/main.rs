@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(perlinnoise::PerlinNoise::new()).run();
+        return App::new(fireworks::Fireworks::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -42,6 +42,9 @@ fn run_app(args: &mut env::Args) {
         22 => App::new(juliaset::JuliaSet::new()).run(),
         23 => App::new(supershape::SuperShape::new()).run(),
         24 => App::new(perlinnoise::PerlinNoise::new()).run(),
+        25 => panic!("Spherical Geometry not implemented"),
+        26 => panic!("3D supershapes not implemented"),
+        27 => App::new(fireworks::Fireworks::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }
