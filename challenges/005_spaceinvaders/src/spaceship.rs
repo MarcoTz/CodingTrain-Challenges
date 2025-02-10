@@ -52,7 +52,7 @@ impl Drawable for SpaceShip {
 }
 
 impl Updatable for SpaceShip {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         let mut to_remove = vec![];
         for (ind, projectile) in self.projectiles.iter_mut().enumerate() {
             projectile.update(ctx);

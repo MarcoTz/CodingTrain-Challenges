@@ -51,7 +51,7 @@ impl SpaceInvaders {
 }
 
 impl Updatable for SpaceInvaders {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.ship.update(ctx);
         self.aliens.update(ctx);
         let projectiles = &self.ship.projectiles;

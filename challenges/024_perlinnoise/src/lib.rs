@@ -86,7 +86,7 @@ impl Drawable for PerlinNoise {
 }
 
 impl Updatable for PerlinNoise {
-    fn update(&mut self, _: &UpdateContext) {
+    fn update(&mut self, _: &mut UpdateContext) {
         let rand_dir = rand_between(0.0, PI / 8.0);
         for grid_x in 0..COLS {
             for grid_y in 0..ROWS {
@@ -101,7 +101,7 @@ impl Updatable for PerlinNoise {
 impl EventHandler for PerlinNoise {}
 
 impl Runnable for PerlinNoise {
-    fn setup(&mut self, _: &SetupContext) {
+    fn setup(&mut self, _: &mut SetupContext) {
         for y in 0..ROWS {
             for x in 0..COLS {
                 self.grid.insert(x, y, Vec2D::rand_unit());

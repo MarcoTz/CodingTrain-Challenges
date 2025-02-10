@@ -42,7 +42,7 @@ impl Drawable for MazeGenerator {
 }
 
 impl Updatable for MazeGenerator {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.hexagon_maze.update(ctx);
         self.square_maze.update(ctx);
     }

@@ -7,7 +7,7 @@ use piston::{
     window::WindowSettings,
     ButtonEvent, Event, MouseCursorEvent, ResizeEvent, Window,
 };
-use piston_window::{Glyphs, PistonWindow, TextureSettings};
+use piston_window::{G2dTextureContext, Glyphs, PistonWindow, TextureSettings};
 
 pub struct App<T: Runnable> {
     window: PistonWindow,
@@ -16,6 +16,7 @@ pub struct App<T: Runnable> {
     runnable: T,
     mouse_pos: [f64; 2],
     glyphs: Glyphs,
+    texture_context: G2dTextureContext,
 }
 
 impl<T: Runnable> App<T> {
@@ -39,12 +40,14 @@ impl<T: Runnable> App<T> {
         )
         .unwrap();
 
+        let context = window.create_texture_context();
         App {
             window,
             events,
             runnable,
             mouse_pos: [0.0, 0.0],
             glyphs,
+            texture_context: context,
         }
     }
 
@@ -56,6 +59,7 @@ impl<T: Runnable> App<T> {
                 context: &c,
                 args,
                 glyphs: &mut self.glyphs,
+                texture_context: &mut self.texture_context,
             };
             self.runnable.draw(&mut context, gl);
             self.glyphs.factory.encoder.flush(device);
@@ -64,13 +68,14 @@ impl<T: Runnable> App<T> {
 
     fn update(&mut self, args: &UpdateArgs) {
         let size = self.window.size();
-        let ctx = UpdateContext {
+        let mut ctx = UpdateContext {
             window_width: size.width,
             window_height: size.height,
             mouse_pos: self.mouse_pos,
             args,
+            texture_context: &mut self.texture_context,
         };
-        self.runnable.update(&ctx)
+        self.runnable.update(&mut ctx)
     }
 
     fn handle_input(&mut self, args: &ButtonArgs) {
@@ -86,9 +91,10 @@ impl<T: Runnable> App<T> {
 
     pub fn run(&mut self) {
         let size = self.window.size();
-        self.runnable.setup(&SetupContext {
+        self.runnable.setup(&mut SetupContext {
             window_width: size.width,
             window_height: size.height,
+            texture_context: &mut self.texture_context,
         });
         while let Some(e) = self.events.next(&mut self.window) {
             if let Some(args) = e.clone().render_args() {

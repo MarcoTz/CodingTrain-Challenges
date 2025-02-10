@@ -44,7 +44,7 @@ impl RainDrop {
 }
 
 impl Updatable for RainCloud {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         let mut to_remove = vec![];
         for (ind, drop) in self.drops.iter_mut().enumerate() {
             drop.update(ctx);
@@ -65,7 +65,7 @@ impl Updatable for RainCloud {
 }
 
 impl Updatable for RainDrop {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.pos.y += self.velocity * ctx.args.dt;
     }
 }

@@ -46,7 +46,7 @@ impl<const N: usize, const M: usize> Drawable for AlienShip<N, M> {
 }
 
 impl<const N: usize, const M: usize> Updatable for AlienShip<N, M> {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         for row in self.alien_rows.iter_mut() {
             for alien in row.iter_mut() {
                 alien.update(ctx)

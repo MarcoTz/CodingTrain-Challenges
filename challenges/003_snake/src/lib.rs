@@ -36,7 +36,7 @@ impl Default for SnakeGame {
 }
 
 impl Updatable for SnakeGame {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.snake.update(ctx);
         let snake_pos = self.snake.pos();
         if snake_pos.0 == self.food.x && snake_pos.1 == self.food.y {

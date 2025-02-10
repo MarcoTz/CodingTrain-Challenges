@@ -160,7 +160,7 @@ impl Drawable for TreeNode {
 }
 
 impl Updatable for SpaceColonization {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         struct Indices {
             point_index: usize,
             node_index: usize,
@@ -249,7 +249,7 @@ impl Runnable for SpaceColonization {
         }
     }
 
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.generate_attraction(ctx.window_width, ctx.window_height);
         self.nodes.push(TreeNode::new(
             ctx.window_width / 2.0,

@@ -85,7 +85,7 @@ impl Drawable for Cell {
 }
 
 impl Updatable for Mitosis {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         if self.cells.is_empty() {
             for _ in 0..START_CELLS {
                 self.cells
@@ -99,7 +99,7 @@ impl Updatable for Mitosis {
 }
 
 impl Updatable for Cell {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.pos += self.velocity * ctx.args.dt;
         if self.pos.x <= 0.0 || self.pos.x + 2.0 * self.radius >= ctx.window_width {
             self.velocity.x *= -1.0;

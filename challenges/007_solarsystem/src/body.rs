@@ -54,7 +54,7 @@ impl Drawable for Body {
     }
 }
 impl Updatable for Body {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.center += self.velocity * ctx.args.dt;
         self.velocity += self.accel * ctx.args.dt;
     }

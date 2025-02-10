@@ -1,10 +1,12 @@
 use super::{drawable::Drawable, eventhandler::EventHandler, updatable::Updatable};
 use crate::SCREENSHOT_DIR;
+use piston_window::G2dTextureContext;
 use std::process::Command;
 
-pub struct SetupContext {
+pub struct SetupContext<'a> {
     pub window_height: f64,
     pub window_width: f64,
+    pub texture_context: &'a mut G2dTextureContext,
 }
 
 pub struct WindowConfig {
@@ -15,7 +17,7 @@ pub struct WindowConfig {
 
 pub trait Runnable: Drawable + Updatable + EventHandler {
     fn config(&self) -> WindowConfig;
-    fn setup(&mut self, _: &SetupContext) {}
+    fn setup(&mut self, _: &mut SetupContext) {}
     fn screenshot(&self) {
         let title = self.config().title.replace(" ", "");
         let date_str = chrono::Local::now().format("%Y%m%d_%H%M%s");

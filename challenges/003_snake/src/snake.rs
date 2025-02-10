@@ -98,7 +98,7 @@ impl Drawable for Snake {
 }
 
 impl Updatable for Snake {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.tick += ctx.args.dt * self.speed;
         if self.tick < 1.0 {
             return;

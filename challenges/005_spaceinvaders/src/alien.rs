@@ -47,7 +47,7 @@ impl Drawable for Alien {
 }
 
 impl Updatable for Alien {
-    fn update(&mut self, _: &UpdateContext) {
+    fn update(&mut self, _: &mut UpdateContext) {
         self.pos.x += self.x_speed;
     }
 }

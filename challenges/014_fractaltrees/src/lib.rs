@@ -78,7 +78,7 @@ impl Drawable for FractalTree {
 }
 
 impl Updatable for FractalTree {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         if self.current_len < self.max_len {
             self.current_len += ctx.args.dt * ctx.window_height / 10.0;
         } else if !self.is_split {
@@ -93,7 +93,7 @@ impl Updatable for FractalTree {
 impl EventHandler for FractalTree {}
 
 impl Runnable for FractalTree {
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.bottom = Vec2D::new(ctx.window_width / 2.0, ctx.window_height);
     }
     fn config(&self) -> WindowConfig {

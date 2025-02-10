@@ -94,7 +94,7 @@ impl Drawable for ReactionDiffusion {
 }
 
 impl Updatable for ReactionDiffusion {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         if self.drawing {
             self.mouse_draw(ctx.window_width, ctx.window_height, ctx.mouse_pos);
         }
@@ -167,7 +167,7 @@ impl Runnable for ReactionDiffusion {
         }
     }
 
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.resize_cells(ctx.window_width, ctx.window_height);
     }
 }

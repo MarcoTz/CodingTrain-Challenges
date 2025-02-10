@@ -94,7 +94,7 @@ impl Drawable for SolarSystem {
 }
 
 impl Updatable for SolarSystem {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         for body in self.bodies.iter_mut() {
             body.update(ctx);
         }
@@ -151,7 +151,7 @@ impl Runnable for SolarSystem {
         }
     }
 
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.generate_background(ctx.window_width, ctx.window_height);
     }
 }

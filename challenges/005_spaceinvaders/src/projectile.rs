@@ -35,7 +35,7 @@ impl Drawable for Projectile {
 }
 
 impl Updatable for Projectile {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.dist_top -= PROJECTILE_VELOCITY * ctx.args.dt;
     }
 }

@@ -231,7 +231,7 @@ impl Drawable for SuperShape {
 }
 
 impl Updatable for SuperShape {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.compute(ctx.window_width, ctx.window_height);
     }
 }
@@ -264,7 +264,7 @@ impl Runnable for SuperShape {
         }
     }
 
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.compute(ctx.window_height, ctx.window_width);
     }
 }

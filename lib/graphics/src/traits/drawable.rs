@@ -1,12 +1,13 @@
 use crate::Graphics;
 use graphics::{Context, Transformed};
 use piston::RenderArgs;
-use piston_window::Glyphs;
+use piston_window::{G2dTextureContext, Glyphs};
 
 pub struct DrawingContext<'a> {
     pub context: &'a Context,
     pub args: &'a RenderArgs,
     pub glyphs: &'a mut Glyphs,
+    pub texture_context: &'a mut G2dTextureContext,
 }
 
 impl<'a> DrawingContext<'a> {

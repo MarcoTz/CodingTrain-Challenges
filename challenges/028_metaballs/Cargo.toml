@@ -8,3 +8,4 @@ graphics= {path="../../lib/graphics"}
 math={path="../../lib/math"}
 rand = "0.8.5"
 piston = "1.0.0" 
+image="0.25.5"

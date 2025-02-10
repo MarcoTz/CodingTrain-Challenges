@@ -303,7 +303,7 @@ impl<const ROWS: usize, const COLS: usize> Drawable for Maze<ROWS, COLS> {
 }
 
 impl<const ROWS: usize, const COLS: usize> Updatable for Maze<ROWS, COLS> {
-    fn update(&mut self, _: &UpdateContext) {
+    fn update(&mut self, _: &mut UpdateContext) {
         if self.done {
             return;
         }

@@ -94,7 +94,7 @@ impl Drawable for JuliaSet {
 }
 
 impl Updatable for JuliaSet {
-    fn update(&mut self, _: &UpdateContext) {}
+    fn update(&mut self, _: &mut UpdateContext) {}
 }
 
 impl EventHandler for JuliaSet {
@@ -149,7 +149,7 @@ impl EventHandler for JuliaSet {
 }
 
 impl Runnable for JuliaSet {
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.compute(ctx.window_width, ctx.window_height);
     }
 

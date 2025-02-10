@@ -199,7 +199,7 @@ impl Drawable for Debris {
 }
 
 impl Updatable for Fireworks {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         if rand_between(0.0, 100.0) > SPAWN_RATE {
             self.rockets
                 .push(Rocket::new(ctx.window_width, ctx.window_height));
@@ -256,14 +256,14 @@ impl Updatable for Fireworks {
 }
 
 impl Updatable for Rocket {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.pos.y -= self.speed * ctx.args.dt;
         self.life_time -= ctx.args.dt;
     }
 }
 
 impl Updatable for Explosion {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.size += SPREAD * ctx.args.dt;
         self.life_time -= ctx.args.dt;
         self.since_dupl += ctx.args.dt;
@@ -271,7 +271,7 @@ impl Updatable for Explosion {
 }
 
 impl Updatable for Debris {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.pos.y += GRAVITY * ctx.args.dt;
         self.life_time -= ctx.args.dt;
     }

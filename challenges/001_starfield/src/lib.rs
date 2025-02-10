@@ -66,7 +66,7 @@ impl Drawable for Star {
 }
 
 impl Updatable for Star {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         self.pos.set_abs(self.pos.abs() + ctx.args.dt * RAY_SPEED);
     }
 }
@@ -96,7 +96,7 @@ impl Drawable for StarSpawner {
 }
 
 impl Updatable for StarSpawner {
-    fn update(&mut self, ctx: &UpdateContext) {
+    fn update(&mut self, ctx: &mut UpdateContext) {
         let mut to_remove = vec![];
         for (ind, star) in self.stars.iter_mut().enumerate() {
             star.update(ctx);

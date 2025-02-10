@@ -17,5 +17,6 @@ pub use traits::updatable::{Updatable, UpdateContext};
 
 // reexports from piston graphics
 pub use graphics::{
-    circle_arc, clear, ellipse, line, polygon, rectangle, types::Color, DrawState, Transformed,
+    circle_arc, clear, ellipse, image, line, polygon, rectangle, types::Color, DrawState,
+    Transformed,
 };

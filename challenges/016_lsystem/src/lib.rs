@@ -48,7 +48,7 @@ impl Drawable for SystemRunner {
 }
 
 impl Updatable for SystemRunner {
-    fn update(&mut self, _: &UpdateContext) {
+    fn update(&mut self, _: &mut UpdateContext) {
         if self.paused {
             return;
         }

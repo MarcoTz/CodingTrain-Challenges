@@ -193,7 +193,7 @@ impl Default for System {
 }
 
 impl Updatable for System {
-    fn update(&mut self, _: &UpdateContext) {
+    fn update(&mut self, _: &mut UpdateContext) {
         match self {
             System::Algae(st, sys) => *st = sys.next(st),
             System::BinTree(st, sys) => *st = sys.next(st),

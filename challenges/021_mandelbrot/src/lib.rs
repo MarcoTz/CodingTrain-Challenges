@@ -91,7 +91,7 @@ impl Drawable for Mandelbrot {
 }
 
 impl Updatable for Mandelbrot {
-    fn update(&mut self, _: &UpdateContext) {}
+    fn update(&mut self, _: &mut UpdateContext) {}
 }
 
 impl EventHandler for Mandelbrot {
@@ -146,7 +146,7 @@ impl EventHandler for Mandelbrot {
 }
 
 impl Runnable for Mandelbrot {
-    fn setup(&mut self, ctx: &SetupContext) {
+    fn setup(&mut self, ctx: &mut SetupContext) {
         self.compute(ctx.window_width, ctx.window_height);
     }
 
