@@ -7,3 +7,5 @@ edition = "2021"
 graphics= {path="../../lib/graphics"}
 math={path="../../lib/math"}
 piston = "1.0.0" 
+image="0.25.5"
+piston_window="0.132.0"
