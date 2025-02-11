@@ -36,6 +36,15 @@ impl Rgba {
         Rgba { r, g, b, a }
     }
 
+    pub fn random() -> Rgba {
+        Rgba {
+            r: rand::random(),
+            g: rand::random(),
+            b: rand::random(),
+            a: 255,
+        }
+    }
+
     pub fn from_hex(hex: &str) -> Option<Rgba> {
         let mut chars = hex.chars();
 
