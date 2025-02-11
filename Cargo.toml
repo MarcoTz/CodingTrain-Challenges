@@ -26,6 +26,7 @@ members = [
   "challenges/031_flappybird",
   "challenges/032_agario",
   "challenges/033_poissondisk",
+  "challenges/034_diffusionlimitedaggregation"
 ]
 
 resolver = "2"
