@@ -7,6 +7,7 @@ pub type TextureCtx = TextureContext<gfx_device_gl::Factory, Resources, CommandB
 pub type Graphics<'a> = gfx_graphics::GfxGraphics<'a, Resources, CommandBuffer>;
 
 pub mod app;
+pub mod colors;
 mod traits;
 pub mod ui_elements;
 

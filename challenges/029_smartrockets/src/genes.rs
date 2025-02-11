@@ -1,7 +1,6 @@
 use super::{MUTATION_RATE, NUM_GENES, STEERING_FORCE};
 use core::array;
-use math::{rand_between, vec2d::Vec2D};
-use std::f64::consts::PI;
+use math::vec2d::Vec2D;
 
 #[derive(Clone)]
 pub struct Genes {
