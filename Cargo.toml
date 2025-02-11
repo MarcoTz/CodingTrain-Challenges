@@ -22,7 +22,8 @@ members = [
   "challenges/027_fireworks",
   "challenges/028_metaballs",
   "challenges/029_smartrockets",
-  "challenges/030_phyllotaxis"
+  "challenges/030_phyllotaxis",
+  "challenges/031_flappybird"
 ]
 
 resolver = "2"
