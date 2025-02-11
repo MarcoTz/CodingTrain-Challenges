@@ -23,7 +23,7 @@ fn hex2num(hex: char) -> Option<u8> {
     }
 }
 
-#[derive(Debug, Default, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct Rgba {
     pub(crate) r: u8,
     pub(crate) g: u8,

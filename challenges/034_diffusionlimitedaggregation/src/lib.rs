@@ -85,7 +85,7 @@ impl Drawable for DiffAgg {
 impl Updatable for DiffAgg {
     fn update(&mut self, ctx: &mut UpdateContext) {
         for walker in self.walkers.iter_mut() {
-            for i in 0..10 {
+            for _ in 0..10 {
                 walker.update(ctx);
             }
         }
