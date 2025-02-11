@@ -31,6 +31,39 @@ pub struct Rgba {
     pub(crate) a: u8,
 }
 
+pub const WHITE: Rgba = Rgba {
+    r: 255,
+    g: 255,
+    b: 255,
+    a: 255,
+};
+
+pub const BLACK: Rgba = Rgba {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 255,
+};
+
+pub const RED: Rgba = Rgba {
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 255,
+};
+pub const GREEN: Rgba = Rgba {
+    r: 0,
+    g: 255,
+    b: 0,
+    a: 255,
+};
+pub const BLUE: Rgba = Rgba {
+    r: 0,
+    g: 0,
+    b: 255,
+    a: 255,
+};
+
 impl Rgba {
     pub fn new(r: u8, g: u8, b: u8, a: u8) -> Rgba {
         Rgba { r, g, b, a }
@@ -145,6 +178,15 @@ impl Rgba {
             g: ((1.0 - t) * self.g as f64 + t * other.g as f64).round() as u8,
             b: ((1.0 - t) * self.b as f64 + t * other.b as f64).round() as u8,
             a: ((1.0 - t) * self.a as f64 + t * other.a as f64).round() as u8,
+        }
+    }
+
+    pub fn with_trans(self, trans: u8) -> Rgba {
+        Rgba {
+            r: self.r,
+            g: self.g,
+            b: self.g,
+            a: trans,
         }
     }
 }
