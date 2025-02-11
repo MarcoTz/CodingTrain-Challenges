@@ -20,7 +20,8 @@ members = [
   "challenges/022_juliaset",
   "challenges/024_perlinnoise",
   "challenges/027_fireworks",
-  "challenges/028_metaballs"
+  "challenges/028_metaballs",
+  "challenges/029_smartrockets"
 ]
 
 resolver = "2"

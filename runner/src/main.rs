@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(metaballs::Metaballs::new()).run();
+        return App::new(smartrockets::SmartRockets::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -46,6 +46,7 @@ fn run_app(args: &mut env::Args) {
         26 => panic!("3D supershapes not implemented"),
         27 => App::new(fireworks::Fireworks::new()).run(),
         28 => App::new(metaballs::Metaballs::new()).run(),
+        29 => App::new(smartrockets::SmartRockets::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }
