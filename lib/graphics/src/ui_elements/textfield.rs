@@ -48,6 +48,10 @@ impl TextField {
         self.text = text;
     }
 
+    pub fn clear(&mut self) {
+        self.text.clear();
+    }
+
     pub fn text(&self) -> String {
         self.text.clone()
     }
