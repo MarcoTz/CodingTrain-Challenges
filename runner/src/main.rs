@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(diasticmachine::Diastic::new()).run();
+        return App::new(wordinteractor::WordInteractor::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -55,6 +55,7 @@ fn run_app(args: &mut env::Args) {
         35 => App::new(travellingsalesperson::TravellingSalesPerson::new()).run(),
         36 => App::new(blobby::Blobby::new()).run(),
         37 => App::new(diasticmachine::Diastic::new()).run(),
+        38 => App::new(wordinteractor::WordInteractor::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

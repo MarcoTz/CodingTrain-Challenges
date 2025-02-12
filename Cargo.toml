@@ -28,7 +28,9 @@ members = [
   "challenges/033_poissondisk",
   "challenges/034_diffusionlimitedaggregation",
   "challenges/035_travellingsalesperson",
-  "challenges/036_blobby"
+  "challenges/036_blobby",
+  "challenges/037_diasticmachine",
+  "challenges/038_wordinteractor",
 ]
 
 resolver = "2"
