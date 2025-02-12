@@ -27,7 +27,8 @@ members = [
   "challenges/032_agario",
   "challenges/033_poissondisk",
   "challenges/034_diffusionlimitedaggregation",
-  "challenges/035_travellingsalesperson"
+  "challenges/035_travellingsalesperson",
+  "challenges/036_blobby"
 ]
 
 resolver = "2"
