@@ -32,7 +32,8 @@ members = [
   "challenges/037_diasticmachine",
   "challenges/038_wordinteractor",
   "challenges/039_madlibs",
-  "challenges/040_tfidf"
+  "challenges/040_tfidf",
+  "challenges/042_markovchain"
 ]
 
 resolver = "2"

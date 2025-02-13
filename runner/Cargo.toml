@@ -35,3 +35,4 @@ diasticmachine={path="../challenges/037_diasticmachine"}
 wordinteractor={path="../challenges/038_wordinteractor"}
 madlibs={path="../challenges/039_madlibs"}
 tfidf={path="../challenges/040_tfidf"}
+markovchain={path="../challenges/042_markovchain"}
