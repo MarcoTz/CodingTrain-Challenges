@@ -34,3 +34,4 @@ blobby={path="../challenges/036_blobby"}
 diasticmachine={path="../challenges/037_diasticmachine"}
 wordinteractor={path="../challenges/038_wordinteractor"}
 madlibs={path="../challenges/039_madlibs"}
+tfidf={path="../challenges/040_tfidf"}

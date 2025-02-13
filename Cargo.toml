@@ -31,7 +31,8 @@ members = [
   "challenges/036_blobby",
   "challenges/037_diasticmachine",
   "challenges/038_wordinteractor",
-  "challenges/039_madlibs"
+  "challenges/039_madlibs",
+  "challenges/040_tfidf"
 ]
 
 resolver = "2"
