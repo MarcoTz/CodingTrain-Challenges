@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(markovchain::MarkovChain::new()).run();
+        return App::new(contextfreegrammar::ContextfreeGrammar::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -60,6 +60,7 @@ fn run_app(args: &mut env::Args) {
         40 => App::new(tfidf::TfIdf::new()).run(),
         41 => panic!("Clappy Bird not implemented"),
         42 => App::new(markovchain::MarkovChain::new()).run(),
+        43 => App::new(contextfreegrammar::ContextfreeGrammar::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }

@@ -33,7 +33,8 @@ members = [
   "challenges/038_wordinteractor",
   "challenges/039_madlibs",
   "challenges/040_tfidf",
-  "challenges/042_markovchain"
+  "challenges/042_markovchain",
+  "challenges/043_contextfreegrammar"
 ]
 
 resolver = "2"
