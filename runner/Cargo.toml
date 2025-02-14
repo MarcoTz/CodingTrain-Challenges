@@ -37,3 +37,4 @@ madlibs={path="../challenges/039_madlibs"}
 tfidf={path="../challenges/040_tfidf"}
 markovchain={path="../challenges/042_markovchain"}
 contextfreegrammar={path="../challenges/043_contextfreegrammar"}
+afinn={path="../challenges/044_afinn"}
