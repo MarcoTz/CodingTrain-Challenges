@@ -1,0 +1,12 @@
+[package]
+name = "pixelsorting"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies] 
+graphics= {path="../../lib/graphics"}
+math={path="../../lib/math"}
+rand = "0.8.5"
+piston = "1.0.0" 
+piston_window="0.132.0"
+image="0.25.5"

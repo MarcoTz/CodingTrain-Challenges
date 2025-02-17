@@ -39,3 +39,4 @@ markovchain={path="../challenges/042_markovchain"}
 contextfreegrammar={path="../challenges/043_contextfreegrammar"}
 afinn={path="../challenges/044_afinn"}
 asteroids={path="../challenges/046_asteroids"}
+pixelsorting={path="../challenges/047_pixelsorting"}
