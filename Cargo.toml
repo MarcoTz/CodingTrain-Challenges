@@ -37,7 +37,8 @@ members = [
   "challenges/043_contextfreegrammar",
   "challenges/044_afinn",
   "challenges/046_asteroids",
-  "challenges/047_pixelsorting"
+  "challenges/047_pixelsorting",
+  "challenges/050_circlepacking"
 ]
 
 resolver = "2"

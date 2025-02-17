@@ -7,7 +7,7 @@ const HELP_MSG: &str = "Usage: runner [NUMBER]\nRuns challenge NUMBER";
 fn run_app(args: &mut env::Args) {
     // This is always the current challenge
     if args.len() == 1 {
-        return App::new(pixelsorting::PixelSorting::new()).run();
+        return App::new(circlepacking::CirclePacking::new()).run();
     }
 
     let arg = args.nth(1).expect(ERR_EXIT_MSG);
@@ -65,6 +65,9 @@ fn run_app(args: &mut env::Args) {
         45 => panic!("Firebase not implemented"),
         46 => App::new(asteroids::Asteroids::new()).run(),
         47 => App::new(pixelsorting::PixelSorting::new()).run(),
+        48 => panic!("White House social media data not implemented"),
+        49 => panic!("White House social media mosaic not implemented"),
+        50 => App::new(circlepacking::CirclePacking::new()).run(),
         _ => panic!("Challenge {num} does not exist"),
     }
 }
