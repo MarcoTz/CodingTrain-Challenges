@@ -8,6 +8,7 @@ pub type Graphics<'a> = gfx_graphics::GfxGraphics<'a, Resources, CommandBuffer>;
 
 pub mod app;
 pub mod colors;
+pub mod poly_outline;
 mod traits;
 pub mod ui_elements;
 

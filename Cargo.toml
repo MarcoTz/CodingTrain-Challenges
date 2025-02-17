@@ -36,6 +36,7 @@ members = [
   "challenges/042_markovchain",
   "challenges/043_contextfreegrammar",
   "challenges/044_afinn",
+  "challenges/046_asteroids"
 ]
 
 resolver = "2"
