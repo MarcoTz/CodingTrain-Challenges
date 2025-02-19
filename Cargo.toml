@@ -38,7 +38,8 @@ members = [
   "challenges/044_afinn",
   "challenges/046_asteroids",
   "challenges/047_pixelsorting",
-  "challenges/050_circlepacking"
+  "challenges/050_circlepacking",
+  "challenges/051_astar"
 ]
 
 resolver = "2"

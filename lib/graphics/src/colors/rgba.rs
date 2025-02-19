@@ -64,6 +64,13 @@ pub const BLUE: Rgba = Rgba {
     a: 255,
 };
 
+pub const YELLOW: Rgba = Rgba {
+    r: 255,
+    g: 255,
+    b: 0,
+    a: 255,
+};
+
 impl Rgba {
     pub fn new(r: u8, g: u8, b: u8, a: u8) -> Rgba {
         Rgba { r, g, b, a }
